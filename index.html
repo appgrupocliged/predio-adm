@@ -1,119 +1,730 @@
+```html
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Grupo CLIGED | Solicitação</title>
+
 <style>
-:root{--bg:#101010;--card:#1b1b1b;--gold:#f1e7a8;--gold2:#d9ca70;--text:#f7f7f7;--muted:#b8b8b8;--line:#3b3b3b}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);font-family:Arial,sans-serif;color:var(--text)}
-.container{max-width:500px;min-height:100vh;margin:auto;padding:26px 18px 34px}
-.logo-wrap{text-align:center;margin:5px 0 22px}.logo{width:190px;max-width:72%;height:auto}
-.card{background:var(--card);border:1px solid #2c2c2c;border-radius:20px;padding:22px;box-shadow:0 12px 35px #0008}
-h1{text-align:center;color:var(--gold);font-size:24px;margin:0 0 8px}
-.subtitle{text-align:center;color:var(--muted);font-size:14px;line-height:1.45;margin-bottom:22px}
-.title{display:block;color:var(--gold);font-weight:bold;font-size:15px;margin:18px 0 9px}
-select{width:100%;padding:14px 12px;border-radius:11px;border:1px solid var(--line);background:#111;color:#fff;font-size:15px}
-.options{display:grid;gap:9px}.option{display:flex;align-items:center;gap:11px;border:1px solid var(--line);border-radius:11px;padding:13px;background:#151515;cursor:pointer}
-.option.selected{border-color:var(--gold2);background:#25231b}.option input{width:19px;height:19px;accent-color:#d9ca70}
-button{width:100%;border:0;border-radius:12px;padding:15px;margin-top:22px;background:var(--gold);color:#151515;font-size:15px;font-weight:800;cursor:pointer}
-button:disabled{opacity:.45;cursor:not-allowed}.note{text-align:center;color:#888;font-size:12px;margin-top:13px}
-.success{display:none;text-align:center}.check{font-size:58px;color:var(--gold)}.success h2{color:var(--gold)}
-.success p{color:var(--muted);line-height:1.6}.reset{background:transparent;color:var(--gold);border:1px solid #5a5332}
+:root{
+  --bg:#101010;
+  --card:#1b1b1b;
+  --gold:#f1e7a8;
+  --gold2:#d9ca70;
+  --text:#f7f7f7;
+  --muted:#b8b8b8;
+  --line:#3b3b3b;
+}
+
+*{
+  box-sizing:border-box
+}
+
+body{
+  margin:0;
+  background:var(--bg);
+  font-family:Arial,sans-serif;
+  color:var(--text)
+}
+
+.container{
+  max-width:500px;
+  min-height:100vh;
+  margin:auto;
+  padding:26px 18px 34px
+}
+
+.logo-wrap{
+  text-align:center;
+  margin:5px 0 22px
+}
+
+.logo{
+  width:190px;
+  max-width:72%;
+  height:auto
+}
+
+.card{
+  background:var(--card);
+  border:1px solid #2c2c2c;
+  border-radius:20px;
+  padding:22px;
+  box-shadow:0 12px 35px #0008
+}
+
+h1{
+  text-align:center;
+  color:var(--gold);
+  font-size:24px;
+  margin:0 0 8px
+}
+
+.subtitle{
+  text-align:center;
+  color:var(--muted);
+  font-size:14px;
+  line-height:1.45;
+  margin-bottom:22px
+}
+
+.title{
+  display:block;
+  color:var(--gold);
+  font-weight:bold;
+  font-size:15px;
+  margin:18px 0 9px
+}
+
+select{
+  width:100%;
+  padding:14px 12px;
+  border-radius:11px;
+  border:1px solid var(--line);
+  background:#111;
+  color:#fff;
+  font-size:15px
+}
+
+select:disabled{
+  opacity:1;
+  color:#fff;
+  background:#25231b;
+  border-color:var(--gold2);
+}
+
+.local-code{
+  display:none;
+  text-align:center;
+  color:var(--gold);
+  font-size:13px;
+  margin-top:9px;
+}
+
+.options{
+  display:grid;
+  gap:9px
+}
+
+.option{
+  display:flex;
+  align-items:center;
+  gap:11px;
+  border:1px solid var(--line);
+  border-radius:11px;
+  padding:13px;
+  background:#151515;
+  cursor:pointer
+}
+
+.option.selected{
+  border-color:var(--gold2);
+  background:#25231b
+}
+
+.option input{
+  width:19px;
+  height:19px;
+  accent-color:#d9ca70
+}
+
+button{
+  width:100%;
+  border:0;
+  border-radius:12px;
+  padding:15px;
+  margin-top:22px;
+  background:var(--gold);
+  color:#151515;
+  font-size:15px;
+  font-weight:800;
+  cursor:pointer
+}
+
+button:disabled{
+  opacity:.45;
+  cursor:not-allowed
+}
+
+.note{
+  text-align:center;
+  color:#888;
+  font-size:12px;
+  margin-top:13px
+}
+
+.success{
+  display:none;
+  text-align:center
+}
+
+.check{
+  font-size:58px;
+  color:var(--gold)
+}
+
+.success h2{
+  color:var(--gold)
+}
+
+.success p{
+  color:var(--muted);
+  line-height:1.6
+}
+
+.reset{
+  background:transparent;
+  color:var(--gold);
+  border:1px solid #5a5332
+}
 </style>
 </head>
+
 <body>
+
 <div class="container">
-<div class="logo-wrap"><img class="logo" src="logo.png" alt="Grupo CLIGED" width="190" height="190" fetchpriority="high"></div>
 
-<div class="card" id="form">
-<h1>Avise nossa equipe</h1>
-<div class="subtitle">Selecione o local e o que precisa de reposição ou limpeza.</div>
+  <div class="logo-wrap">
+    <img
+      class="logo"
+      src="logo.png"
+      alt="Grupo CLIGED"
+      width="190"
+      height="190"
+      fetchpriority="high"
+    >
+  </div>
 
-<label class="title">📍 Local</label>
-<select id="local">
-<option value="">Selecione o local...</option>
-<option value="Autorização">Autorização</option><option value="Diretoria">Diretoria</option><option value="Gerência">Gerência</option><option value="Call Center">Call Center</option><option value="T.I">T.I</option><option value="CTA">CTA</option><option value="Comfort">Comfort</option><option value="Infraestrutura">Infraestrutura</option><option value="Marketing">Marketing</option><option value="Faturamento">Faturamento</option><option value="Financeiro">Financeiro</option><option value="RH">RH</option><option value="HEAD">HEAD</option><option value="Compras">Compras</option>
-</select>
+  <div class="card" id="form">
 
-<label class="title">🛠️ O que precisa de atenção?</label>
-<div class="options"><label class="option"><input type="checkbox" value="Papel higiênico"><span>🧻</span><span>Papel higiênico</span></label><label class="option"><input type="checkbox" value="Papel toalha"><span>🧻</span><span>Papel toalha</span></label><label class="option"><input type="checkbox" value="Sabonete líquido"><span>🧴</span><span>Sabonete líquido</span></label><label class="option"><input type="checkbox" value="Troca/retirada de lixo"><span>🗑️</span><span>Troca/retirada de lixo</span></label><label class="option"><input type="checkbox" value="Solicitar limpeza"><span>🧹</span><span>Solicitar limpeza</span></label></div>
+    <h1>Avise nossa equipe</h1>
 
-<button id="send" disabled>ENVIAR SOLICITAÇÃO</button>
-<div class="note">Sua solicitação será registrada para atendimento.</div>
-</div>
+    <div class="subtitle">
+      Informe o que precisa de reposição ou limpeza.
+    </div>
 
-<div class="card success" id="success">
-<div class="check">✓</div>
-<h2>Solicitação enviada!</h2>
-<p id="summary"></p>
-<button class="reset" type="button" id="newRequest">FAZER NOVA SOLICITAÇÃO</button>
-</div>
+    <label class="title">📍 Local</label>
+
+    <select id="local">
+      <option value="">Selecione o local...</option>
+
+      <option value="B.01 - DIRETORIA">
+        B.01 - DIRETORIA
+      </option>
+
+      <option value="B.02 - CORREDOR AUTORIZAÇÃO">
+        B.02 - CORREDOR AUTORIZAÇÃO
+      </option>
+
+      <option value="B.03 - FINANCEIRO">
+        B.03 - FINANCEIRO
+      </option>
+
+      <option value="B.04 - RH">
+        B.04 - RH
+      </option>
+
+      <option value="B.05 - COMPRAS">
+        B.05 - COMPRAS
+      </option>
+
+      <option value="B.06 - ESTOQUE">
+        B.06 - ESTOQUE
+      </option>
+
+      <option value="B.07 - ESTOQUE">
+        B.07 - ESTOQUE
+      </option>
+
+      <option value="B.08 - CONTROLADORIA">
+        B.08 - CONTROLADORIA
+      </option>
+
+      <option value="B.09 - COWORKING">
+        B.09 - COWORKING
+      </option>
+
+      <option value="B.10 - CORREDOR REUNIÃO">
+        B.10 - CORREDOR REUNIÃO
+      </option>
+
+      <option value="B.11 - D.P">
+        B.11 - D.P
+      </option>
+
+      <option value="B.12 - CORREDOR CALL CENTER">
+        B.12 - CORREDOR CALL CENTER
+      </option>
+
+      <option value="B.13 - COMFORT ADM">
+        B.13 - COMFORT ADM
+      </option>
+
+      <option value="B.14 - T.I">
+        B.14 - T.I
+      </option>
+
+      <option value="B.15 - CTA ADM">
+        B.15 - CTA ADM
+      </option>
+
+      <option value="B.16 - MARKETING / INFRAESTRUTURA">
+        B.16 - MARKETING / INFRAESTRUTURA
+      </option>
+
+      <option value="B.17 - FATURAMENTO">
+        B.17 - FATURAMENTO
+      </option>
+
+      <option value="B.18 - AUDITORIA">
+        B.18 - AUDITORIA
+      </option>
+
+      <option value="B.19 - HEAD">
+        B.19 - HEAD
+      </option>
+
+    </select>
+
+    <div class="local-code" id="localCode"></div>
+
+    <label class="title">
+      🛠️ O que precisa de atenção?
+    </label>
+
+    <div class="options">
+
+      <label class="option">
+        <input type="checkbox" value="Papel higiênico">
+        <span>🧻</span>
+        <span>Papel higiênico</span>
+      </label>
+
+      <label class="option">
+        <input type="checkbox" value="Papel toalha">
+        <span>🧻</span>
+        <span>Papel toalha</span>
+      </label>
+
+      <label class="option">
+        <input type="checkbox" value="Sabonete líquido">
+        <span>🧴</span>
+        <span>Sabonete líquido</span>
+      </label>
+
+      <label class="option">
+        <input type="checkbox" value="Troca/retirada de lixo">
+        <span>🗑️</span>
+        <span>Troca/retirada de lixo</span>
+      </label>
+
+      <label class="option">
+        <input type="checkbox" value="Solicitar limpeza">
+        <span>🧹</span>
+        <span>Solicitar limpeza</span>
+      </label>
+
+    </div>
+
+    <button id="send" disabled>
+      ENVIAR SOLICITAÇÃO
+    </button>
+
+    <div class="note">
+      Sua solicitação será registrada para atendimento.
+    </div>
+
+  </div>
+
+  <div class="card success" id="success">
+
+    <div class="check">✓</div>
+
+    <h2>Solicitação enviada!</h2>
+
+    <p id="summary"></p>
+
+    <button
+      class="reset"
+      type="button"
+      id="newRequest"
+    >
+      FAZER NOVA SOLICITAÇÃO
+    </button>
+
+  </div>
+
 </div>
 
 <script>
-const localEl=document.getElementById('local');
-const boxes=document.querySelectorAll('input[type=checkbox]');
-const btn=document.getElementById('send');
-const form=document.getElementById('form');
-const success=document.getElementById('success');
-const summary=document.getElementById('summary');
-const newRequest=document.getElementById('newRequest');
-newRequest.addEventListener('click',()=>location.reload());
+
+/*
+==================================================
+CONFIGURAÇÃO DOS LOCAIS
+==================================================
+*/
+
+const LOCAIS = {
+
+  "B.01": "B.01 - DIRETORIA",
+
+  "B.02": "B.02 - CORREDOR AUTORIZAÇÃO",
+
+  "B.03": "B.03 - FINANCEIRO",
+
+  "B.04": "B.04 - RH",
+
+  "B.05": "B.05 - COMPRAS",
+
+  "B.06": "B.06 - ESTOQUE",
+
+  "B.07": "B.07 - ESTOQUE",
+
+  "B.08": "B.08 - CONTROLADORIA",
+
+  "B.09": "B.09 - COWORKING",
+
+  "B.10": "B.10 - CORREDOR REUNIÃO",
+
+  "B.11": "B.11 - D.P",
+
+  "B.12": "B.12 - CORREDOR CALL CENTER",
+
+  "B.13": "B.13 - COMFORT ADM",
+
+  "B.14": "B.14 - T.I",
+
+  "B.15": "B.15 - CTA ADM",
+
+  "B.16": "B.16 - MARKETING / INFRAESTRUTURA",
+
+  "B.17": "B.17 - FATURAMENTO",
+
+  "B.18": "B.18 - AUDITORIA",
+
+  "B.19": "B.19 - HEAD"
+
+};
+
+
+/*
+==================================================
+ELEMENTOS
+==================================================
+*/
+
+const localEl = document.getElementById("local");
+
+const boxes = document.querySelectorAll(
+  'input[type="checkbox"]'
+);
+
+const btn = document.getElementById("send");
+
+const form = document.getElementById("form");
+
+const success = document.getElementById("success");
+
+const summary = document.getElementById("summary");
+
+const newRequest = document.getElementById("newRequest");
+
+const localCode = document.getElementById("localCode");
+
+
+/*
+==================================================
+NOVA SOLICITAÇÃO
+==================================================
+*/
+
+newRequest.addEventListener(
+  "click",
+  () => location.reload()
+);
+
+
+/*
+==================================================
+IDENTIFICA QR CODE
+==================================================
+*/
+
+function identificarLocalPorQRCode(){
+
+  const params = new URLSearchParams(
+    window.location.search
+  );
+
+  const codigo = params.get("local");
+
+  if(!codigo){
+    return;
+  }
+
+  const codigoNormalizado =
+    codigo.toUpperCase().trim();
+
+  const local =
+    LOCAIS[codigoNormalizado];
+
+  if(!local){
+
+    console.warn(
+      "Código de local não encontrado:",
+      codigoNormalizado
+    );
+
+    return;
+  }
+
+  /*
+  Seleciona automaticamente o local
+  */
+
+  localEl.value = local;
+
+  /*
+  Impede alteração quando veio pelo QR Code
+  */
+
+  localEl.disabled = true;
+
+  /*
+  Mostra o código utilizado
+  */
+
+  localCode.textContent =
+    "📍 Local identificado pelo QR Code: " +
+    codigoNormalizado;
+
+  localCode.style.display = "block";
+
+  update();
+
+}
+
+
+/*
+==================================================
+ATUALIZAÇÃO DO FORMULÁRIO
+==================================================
+*/
 
 function update(){
- const selected=[...boxes].filter(b=>b.checked);
- btn.disabled=!localEl.value || selected.length===0;
- boxes.forEach(b=>b.closest('.option').classList.toggle('selected',b.checked));
+
+  const selected =
+    [...boxes].filter(
+      b => b.checked
+    );
+
+  btn.disabled =
+    !localEl.value ||
+    selected.length === 0;
+
+  boxes.forEach(
+    b =>
+      b.closest(".option")
+       .classList.toggle(
+         "selected",
+         b.checked
+       )
+  );
+
 }
-localEl.addEventListener('change',update);
-boxes.forEach(b=>b.addEventListener('change',update));
 
-btn.addEventListener('click', async ()=>{
-  const local=localEl.value;
-  const selected=[...boxes].filter(b=>b.checked).map(b=>b.value);
 
-  btn.disabled=true;
-  btn.textContent='ENVIANDO...';
+/*
+==================================================
+EVENTOS
+==================================================
+*/
 
-  const payload={
-    customer_id:'moreiradasilvafabio31@gmail.com',
-    customer_id_type:'E',
-    department_id:'2d507dafee35b29d9e5852d9b0c4ce2c',
-    category_id:'52d32a3af1d7fd87c277f7aec520b38b',
-    subject:'Solicitação - '+local,
-    message:'Local: '+local+'\\n\\nSolicitação:\\n- '+selected.join('\\n- '),
-    priority:'2'
-  };
+localEl.addEventListener(
+  "change",
+  update
+);
 
-  try {
-    const response=await fetch("https://predio-adm-api.appgrupocliged.workers.dev/solicitacao", {
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify(payload)
-    });
+boxes.forEach(
+  b =>
+    b.addEventListener(
+      "change",
+      update
+    )
+);
 
-    const result=await response.json();
 
-    if(!response.ok || !result.sucesso){
-      throw new Error(result.mensagem || 'Não foi possível registrar a solicitação.');
+/*
+==================================================
+ENVIO DA SOLICITAÇÃO
+==================================================
+*/
+
+btn.addEventListener(
+  "click",
+  async () => {
+
+    const local =
+      localEl.value;
+
+    const selected =
+      [...boxes]
+        .filter(b => b.checked)
+        .map(b => b.value);
+
+    btn.disabled = true;
+
+    btn.textContent =
+      "ENVIANDO...";
+
+
+    /*
+    ==============================================
+    PAYLOAD
+    ==============================================
+    */
+
+    const payload = {
+
+      customer_id:
+        "moreiradasilvafabio31@gmail.com",
+
+      customer_id_type:
+        "E",
+
+      department_id:
+        "2d507dafee35b29d9e5852d9b0c4ce2c",
+
+      category_id:
+        "52d32a3af1d7fd87c277f7aec520b38b",
+
+      subject:
+        "Solicitação - " + local,
+
+      message:
+        "Local: " +
+        local +
+        "\\n\\nSolicitação:\\n- " +
+        selected.join("\\n- "),
+
+      priority:
+        "2"
+
+    };
+
+
+    /*
+    ==============================================
+    ENVIO PARA O CLOUDFLARE WORKER
+    ==============================================
+    */
+
+    try {
+
+      const response =
+        await fetch(
+          "https://predio-adm-api.appgrupocliged.workers.dev/solicitacao",
+          {
+            method: "POST",
+
+            headers: {
+              "Content-Type":
+                "application/json"
+            },
+
+            body:
+              JSON.stringify(payload)
+          }
+        );
+
+
+      const result =
+        await response.json();
+
+
+      /*
+      ============================================
+      VERIFICAÇÃO
+      ============================================
+      */
+
+      if(
+        !response.ok ||
+        !result.sucesso
+      ){
+
+        throw new Error(
+          result.mensagem ||
+          "Não foi possível registrar a solicitação."
+        );
+
+      }
+
+
+      /*
+      ============================================
+      SUCESSO
+      ============================================
+      */
+
+      summary.innerHTML =
+
+        "<strong>Local:</strong> " +
+        local +
+
+        "<br><br>" +
+
+        "<strong>Solicitação:</strong><br>" +
+        selected.join("<br>") +
+
+        "<br><br>" +
+
+        "<strong>Data:</strong> " +
+        new Date().toLocaleString(
+          "pt-BR"
+        );
+
+
+      form.style.display =
+        "none";
+
+      success.style.display =
+        "block";
+
+
+    } catch(error) {
+
+      console.error(error);
+
+      alert(
+        "Não foi possível enviar a solicitação. Tente novamente."
+      );
+
+      btn.disabled =
+        false;
+
+      btn.textContent =
+        "ENVIAR SOLICITAÇÃO";
+
     }
 
-    summary.innerHTML =
-      '<strong>Local:</strong> '+local+'<br><br>'+
-      '<strong>Solicitação:</strong><br>'+selected.join('<br>')+
-      '<br><br><strong>Data:</strong> '+new Date().toLocaleString('pt-BR');
-
-    form.style.display='none';
-    success.style.display='block';
-
-  } catch(error) {
-    console.error(error);
-    alert('Não foi possível enviar a solicitação. Tente novamente.');
-    btn.disabled=false;
-    btn.textContent='ENVIAR SOLICITAÇÃO';
   }
-});
+);
+
+
+/*
+==================================================
+INICIALIZAÇÃO
+==================================================
+*/
+
+identificarLocalPorQRCode();
+
+update();
+
 </script>
+
 </body>
 </html>
+```
