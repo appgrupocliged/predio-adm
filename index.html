@@ -600,6 +600,56 @@ btn.addEventListener(
         );
 
 
+    /*
+    ================================================
+    VALIDAÇÃO
+    ================================================
+    */
+
+    if (!codigoLocal) {
+
+      alert(
+        "Código do local não informado."
+      );
+
+      return;
+
+    }
+
+
+    if (!locaisQR[codigoLocal]) {
+
+      alert(
+        "Código de local inválido."
+      );
+
+      return;
+
+    }
+
+
+    if (!local) {
+
+      alert(
+        "Selecione um local."
+      );
+
+      return;
+
+    }
+
+
+    if (selected.length === 0) {
+
+      alert(
+        "Selecione pelo menos uma opção."
+      );
+
+      return;
+
+    }
+
+
     btn.disabled = true;
 
     btn.textContent =
@@ -610,18 +660,23 @@ btn.addEventListener(
     ================================================
     PAYLOAD ENVIADO PARA O WORKER
     ================================================
+    
+    IMPORTANTE:
+    O Worker espera o campo "local_code".
+    
+    O código B.17 é enviado aqui.
+    
+    O Worker é responsável por converter:
+    
+    B.17 → FATURAMENTO
+    
+    ================================================
     */
 
     const payload = {
 
-      customer_id:
-        "moreiradasilvafabio31@gmail.com",
-
-      customer_id_type:
-        "E",
-
-      department_id:
-        "2d507dafee35b29d9e5852d9b0c4ce2c",
+      local_code:
+        codigoLocal,
 
       category_id:
         "52d32a3af1d7fd87c277f7aec520b38b",
@@ -639,6 +694,12 @@ btn.addEventListener(
         "2"
 
     };
+
+
+    console.log(
+      "Enviando solicitação:",
+      payload
+    );
 
 
     try {
@@ -670,6 +731,12 @@ btn.addEventListener(
 
       const result =
         await response.json();
+
+
+      console.log(
+        "Resposta da API:",
+        result
+      );
 
 
       /*
@@ -727,10 +794,14 @@ btn.addEventListener(
 
     catch(error) {
 
-      console.error(error);
+      console.error(
+        "Erro ao enviar solicitação:",
+        error
+      );
 
 
       alert(
+        error.message ||
         "Não foi possível enviar a solicitação. Tente novamente."
       );
 
@@ -751,4 +822,3 @@ btn.addEventListener(
 
 </body>
 </html>
-```
