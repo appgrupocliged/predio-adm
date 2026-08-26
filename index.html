@@ -1,11 +1,20 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0"
+>
+
 <title>Grupo CLIGED | Solicitação</title>
 
+
 <style>
+
 :root{
   --bg:#101010;
   --card:#1b1b1b;
@@ -170,14 +179,20 @@ button:disabled{
   color:var(--gold);
   border:1px solid #5a5332
 }
+
 </style>
+
 </head>
+
 
 <body>
 
+
 <div class="container">
 
+
   <div class="logo-wrap">
+
     <img
       class="logo"
       src="logo.png"
@@ -186,23 +201,36 @@ button:disabled{
       height="190"
       fetchpriority="high"
     >
+
   </div>
+
 
   <div class="card" id="form">
 
-    <h1>Avise nossa equipe</h1>
+    <h1>
+      Avise nossa equipe
+    </h1>
+
 
     <div class="subtitle">
       Selecione o local e o que precisa de reposição ou limpeza.
     </div>
 
-    <label class="title">📍 Local</label>
+
+    <label class="title">
+      📍 Local
+    </label>
+
 
     <select id="local">
 
-      <option value="">Selecione o local...</option>
+      <option value="">
+        Selecione o local...
+      </option>
 
-      <option value="DIRETORIA">Diretoria</option>
+      <option value="DIRETORIA">
+        Diretoria
+      </option>
 
       <option value="CORREDOR AUTORIZAÇÃO">
         Corredor Autorização
@@ -282,54 +310,86 @@ button:disabled{
 
     <div class="options">
 
+
       <label class="option">
+
         <input
           type="checkbox"
           value="Papel higiênico"
         >
+
         <span>🧻</span>
-        <span>Papel higiênico</span>
+
+        <span>
+          Papel higiênico
+        </span>
+
       </label>
 
 
       <label class="option">
+
         <input
           type="checkbox"
           value="Papel toalha"
         >
+
         <span>🧻</span>
-        <span>Papel toalha</span>
+
+        <span>
+          Papel toalha
+        </span>
+
       </label>
 
 
       <label class="option">
+
         <input
           type="checkbox"
           value="Sabonete líquido"
         >
+
         <span>🧴</span>
-        <span>Sabonete líquido</span>
+
+        <span>
+          Sabonete líquido
+        </span>
+
       </label>
 
 
       <label class="option">
+
         <input
           type="checkbox"
           value="Troca/retirada de lixo"
         >
+
         <span>🗑️</span>
-        <span>Troca/retirada de lixo</span>
+
+        <span>
+          Troca/retirada de lixo
+        </span>
+
       </label>
 
 
       <label class="option">
+
         <input
           type="checkbox"
           value="Solicitar limpeza"
         >
+
         <span>🧹</span>
-        <span>Solicitar limpeza</span>
+
+        <span>
+          Solicitar limpeza
+        </span>
+
       </label>
+
 
     </div>
 
@@ -368,38 +428,33 @@ button:disabled{
 
   </div>
 
+
 </div>
 
 
 <script>
 
-/*
-====================================================
-MAPEAMENTO DOS QR CODES
-====================================================
 
-B.1  = DIRETORIA
-B.2  = CORREDOR AUTORIZAÇÃO
-B.3  = FINANCEIRO
-B.4  = RH
-B.5  = COMPRAS
-B.6  = ESTOQUE
-B.7  = ESTOQUE
-B.8  = CONTROLADORIA
-B.9  = COWORKING
-B.10 = CORREDOR REUNIÃO
-B.11 = D.P
-B.12 = CORREDOR CALL CENTER
-B.13 = COMFORT ADM
-B.14 = T.I
-B.15 = CTA ADM
-B.16 = MARKETING / INFRAESTRUTURA
-B.17 = FATURAMENTO
-B.18 = AUDITORIA
-B.19 = QUALIDADE
+// ============================================================
+// MAPA DOS QR CODES
+// ============================================================
+//
+// O código do QR NÃO é enviado como nome do local.
+//
+// Exemplo:
+//
+// B.17
+// ↓
+// local_code = "B.17"
+// ↓
+// Worker
+// ↓
+// FATURAMENTO
+//
+// O mesmo processo vale para todos os códigos.
+//
+// ============================================================
 
-====================================================
-*/
 
 const locaisQR = {
 
@@ -444,35 +499,45 @@ const locaisQR = {
 };
 
 
+// ============================================================
+// ELEMENTOS
+// ============================================================
+
+
 const localEl =
   document.getElementById("local");
+
 
 const boxes =
   document.querySelectorAll(
     'input[type="checkbox"]'
   );
 
+
 const btn =
   document.getElementById("send");
+
 
 const form =
   document.getElementById("form");
 
+
 const success =
   document.getElementById("success");
 
+
 const summary =
   document.getElementById("summary");
+
 
 const newRequest =
   document.getElementById("newRequest");
 
 
-/*
-====================================================
-NOVA SOLICITAÇÃO
-====================================================
-*/
+// ============================================================
+// NOVA SOLICITAÇÃO
+// ============================================================
+
 
 newRequest.addEventListener(
   "click",
@@ -480,11 +545,10 @@ newRequest.addEventListener(
 );
 
 
-/*
-====================================================
-ATUALIZAÇÃO DO FORMULÁRIO
-====================================================
-*/
+// ============================================================
+// ATUALIZA FORMULÁRIO
+// ============================================================
+
 
 function update(){
 
@@ -492,6 +556,7 @@ function update(){
     [...boxes].filter(
       b => b.checked
     );
+
 
   btn.disabled =
     !localEl.value ||
@@ -511,11 +576,10 @@ function update(){
 }
 
 
-/*
-====================================================
-EVENTOS
-====================================================
-*/
+// ============================================================
+// EVENTOS
+// ============================================================
+
 
 localEl.addEventListener(
   "change",
@@ -532,59 +596,72 @@ boxes.forEach(
 );
 
 
-/*
-====================================================
-IDENTIFICAÇÃO DO QR CODE
-====================================================
+// ============================================================
+// IDENTIFICA QR CODE
+// ============================================================
 
-Quando alguém acessar:
-
-https://appgrupocliged.github.io/predio-adm/?local=B.14
-
-o sistema identifica B.14 e transforma
-automaticamente em T.I.
-
-====================================================
-*/
 
 const params =
   new URLSearchParams(
     window.location.search
   );
 
-const codigoLocal =
+
+const codigoLocalURL =
   params.get("local");
 
 
+// Normaliza o código.
+//
+// B.17
+// b.17
+// B.17 com espaços
+//
+// passam a ser tratados como B.17.
+
+
+const codigoQR =
+  codigoLocalURL
+    ? codigoLocalURL
+        .trim()
+        .toUpperCase()
+    : null;
+
+
+// ============================================================
+// APLICA LOCAL DO QR
+// ============================================================
+
+
 if (
-  codigoLocal &&
-  locaisQR[codigoLocal]
+  codigoQR &&
+  locaisQR[codigoQR]
 ) {
 
+  // Mostra o NOME no formulário
   localEl.value =
-    locaisQR[codigoLocal];
+    locaisQR[codigoQR];
 
-  /*
-  Impede que o usuário altere o local
-  quando o acesso veio de um QR Code.
-  */
 
-  localEl.disabled = true;
+  // Impede alteração manual
+  localEl.disabled =
+    true;
+
 
   update();
 
 }
 
 
-/*
-====================================================
-ENVIO DA SOLICITAÇÃO
-====================================================
-*/
+// ============================================================
+// ENVIO
+// ============================================================
+
 
 btn.addEventListener(
   "click",
   async () => {
+
 
     const local =
       localEl.value;
@@ -600,24 +677,15 @@ btn.addEventListener(
         );
 
 
-    /*
-    ================================================
-    VALIDAÇÃO
-    ================================================
-    */
-
-    if (!codigoLocal) {
-
-      alert(
-        "Código do local não informado."
-      );
-
-      return;
-
-    }
+    // ========================================================
+    // VALIDAÇÕES
+    // ========================================================
 
 
-    if (!locaisQR[codigoLocal]) {
+    if (
+      codigoQR &&
+      !locaisQR[codigoQR]
+    ) {
 
       alert(
         "Código de local inválido."
@@ -639,7 +707,9 @@ btn.addEventListener(
     }
 
 
-    if (selected.length === 0) {
+    if (
+      selected.length === 0
+    ) {
 
       alert(
         "Selecione pelo menos uma opção."
@@ -650,50 +720,89 @@ btn.addEventListener(
     }
 
 
-    btn.disabled = true;
+    // ========================================================
+    // BOTÃO
+    // ========================================================
+
+
+    btn.disabled =
+      true;
+
 
     btn.textContent =
       "ENVIANDO...";
 
 
-    /*
-    ================================================
-    PAYLOAD ENVIADO PARA O WORKER
-    ================================================
-    
-    IMPORTANTE:
-    O Worker espera o campo "local_code".
-    
-    O código B.17 é enviado aqui.
-    
-    O Worker é responsável por converter:
-    
-    B.17 → FATURAMENTO
-    
-    ================================================
-    */
+    // ========================================================
+    // PAYLOAD
+    // ========================================================
+    //
+    // ESTA É A PARTE IMPORTANTE.
+    //
+    // O Worker precisa receber:
+    //
+    // local_code
+    // department_id
+    // category_id
+    // subject
+    // message
+    // priority
+    //
+    // ========================================================
+
 
     const payload = {
 
+      // Código do QR
       local_code:
-        codigoLocal,
+        codigoQR || null,
 
+
+      // Cliente correto
+      customer_id:
+        "appgrupocliged@gmail.com",
+
+
+      customer_id_type:
+        "E",
+
+
+      // Departamento Infraestrutura
+      department_id:
+        "2d507dafee35b29d9e5852d9b0c4ce2c",
+
+
+      // Categoria Prédio ADM
       category_id:
         "52d32a3af1d7fd87c277f7aec520b38b",
 
-      subject:
-        "Solicitação - " + local,
 
+      // Assunto
+      subject:
+        "Solicitação - " +
+        local,
+
+
+      // Mensagem
       message:
         "Local: " +
         local +
         "\n\nSolicitação:\n- " +
-        selected.join("\n- "),
+        selected.join(
+          "\n- "
+        ),
 
+
+      // Prioridade
       priority:
         "2"
 
     };
+
+
+    // ========================================================
+    // LOG PARA TESTE
+    // ========================================================
 
 
     console.log(
@@ -702,31 +811,41 @@ btn.addEventListener(
     );
 
 
+    // ========================================================
+    // ENVIO PARA WORKER
+    // ========================================================
+
+
     try {
 
-      /*
-      ==============================================
-      WORKER / API
-      ==============================================
-      */
 
       const response =
         await fetch(
           "https://predio-adm-api.appgrupocliged.workers.dev/solicitacao",
           {
-            method: "POST",
+
+            method:
+              "POST",
 
             headers: {
+
               "Content-Type":
                 "application/json"
+
             },
 
             body:
               JSON.stringify(
                 payload
               )
+
           }
         );
+
+
+      // ======================================================
+      // RESPOSTA DA API
+      // ======================================================
 
 
       const result =
@@ -739,11 +858,10 @@ btn.addEventListener(
       );
 
 
-      /*
-      ==============================================
-      VERIFICAÇÃO DO RETORNO
-      ==============================================
-      */
+      // ======================================================
+      // ERRO
+      // ======================================================
+
 
       if (
         !response.ok ||
@@ -758,11 +876,10 @@ btn.addEventListener(
       }
 
 
-      /*
-      ==============================================
-      TELA DE SUCESSO
-      ==============================================
-      */
+      // ======================================================
+      // SUCESSO
+      // ======================================================
+
 
       summary.innerHTML =
 
@@ -773,26 +890,33 @@ btn.addEventListener(
 
         "<strong>Solicitação:</strong><br>" +
 
-        selected.join("<br>") +
+        selected.join(
+          "<br>"
+        ) +
 
         "<br><br>" +
 
         "<strong>Data:</strong> " +
 
         new Date()
-          .toLocaleString("pt-BR");
+          .toLocaleString(
+            "pt-BR"
+          );
 
 
       form.style.display =
         "none";
 
+
       success.style.display =
         "block";
+
 
     }
 
 
     catch(error) {
+
 
       console.error(
         "Erro ao enviar solicitação:",
@@ -818,7 +942,10 @@ btn.addEventListener(
   }
 );
 
+
 </script>
 
+
 </body>
+
 </html>
