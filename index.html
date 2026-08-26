@@ -25,32 +25,32 @@
 }
 
 *{
-  box-sizing:border-box
+  box-sizing:border-box;
 }
 
 body{
   margin:0;
   background:var(--bg);
   font-family:Arial,sans-serif;
-  color:var(--text)
+  color:var(--text);
 }
 
 .container{
   max-width:500px;
   min-height:100vh;
   margin:auto;
-  padding:26px 18px 34px
+  padding:26px 18px 34px;
 }
 
 .logo-wrap{
   text-align:center;
-  margin:5px 0 22px
+  margin:5px 0 22px;
 }
 
 .logo{
   width:190px;
   max-width:72%;
-  height:auto
+  height:auto;
 }
 
 .card{
@@ -58,14 +58,14 @@ body{
   border:1px solid #2c2c2c;
   border-radius:20px;
   padding:22px;
-  box-shadow:0 12px 35px #0008
+  box-shadow:0 12px 35px #0008;
 }
 
 h1{
   text-align:center;
   color:var(--gold);
   font-size:24px;
-  margin:0 0 8px
+  margin:0 0 8px;
 }
 
 .subtitle{
@@ -73,7 +73,7 @@ h1{
   color:var(--muted);
   font-size:14px;
   line-height:1.45;
-  margin-bottom:22px
+  margin-bottom:22px;
 }
 
 .title{
@@ -81,7 +81,7 @@ h1{
   color:var(--gold);
   font-weight:bold;
   font-size:15px;
-  margin:18px 0 9px
+  margin:18px 0 9px;
 }
 
 select{
@@ -91,7 +91,7 @@ select{
   border:1px solid var(--line);
   background:#111;
   color:#fff;
-  font-size:15px
+  font-size:15px;
 }
 
 select:disabled{
@@ -99,6 +99,7 @@ select:disabled{
   color:#fff;
   background:#25231b;
   border-color:var(--gold2);
+  cursor:not-allowed;
 }
 
 .local-code{
@@ -111,7 +112,7 @@ select:disabled{
 
 .options{
   display:grid;
-  gap:9px
+  gap:9px;
 }
 
 .option{
@@ -122,18 +123,18 @@ select:disabled{
   border-radius:11px;
   padding:13px;
   background:#151515;
-  cursor:pointer
+  cursor:pointer;
 }
 
 .option.selected{
   border-color:var(--gold2);
-  background:#25231b
+  background:#25231b;
 }
 
 .option input{
   width:19px;
   height:19px;
-  accent-color:#d9ca70
+  accent-color:#d9ca70;
 }
 
 button{
@@ -146,56 +147,53 @@ button{
   color:#151515;
   font-size:15px;
   font-weight:800;
-  cursor:pointer
+  cursor:pointer;
 }
 
 button:disabled{
   opacity:.45;
-  cursor:not-allowed
+  cursor:not-allowed;
 }
 
 .note{
   text-align:center;
   color:#888;
   font-size:12px;
-  margin-top:13px
+  margin-top:13px;
 }
 
 .success{
   display:none;
-  text-align:center
+  text-align:center;
 }
 
 .check{
   font-size:58px;
-  color:var(--gold)
+  color:var(--gold);
 }
 
 .success h2{
-  color:var(--gold)
+  color:var(--gold);
 }
 
 .success p{
   color:var(--muted);
-  line-height:1.6
+  line-height:1.6;
 }
 
 .reset{
   background:transparent;
   color:var(--gold);
-  border:1px solid #5a5332
+  border:1px solid #5a5332;
 }
 
 </style>
 
 </head>
 
-
 <body>
 
-
 <div class="container">
-
 
   <div class="logo-wrap">
 
@@ -210,6 +208,10 @@ button:disabled{
 
   </div>
 
+
+  <!-- =====================================================
+       FORMULÁRIO
+       ===================================================== -->
 
   <div class="card" id="form">
 
@@ -233,79 +235,79 @@ button:disabled{
         Selecione o local...
       </option>
 
-      <option value="B.01 - DIRETORIA">
+      <option value="B.01">
         B.01 - DIRETORIA
       </option>
 
-      <option value="B.02 - CORREDOR AUTORIZAÇÃO">
+      <option value="B.02">
         B.02 - CORREDOR AUTORIZAÇÃO
       </option>
 
-      <option value="B.03 - FINANCEIRO">
+      <option value="B.03">
         B.03 - FINANCEIRO
       </option>
 
-      <option value="B.04 - RH">
+      <option value="B.04">
         B.04 - RH
       </option>
 
-      <option value="B.05 - COMPRAS">
+      <option value="B.05">
         B.05 - COMPRAS
       </option>
 
-      <option value="B.06 - ESTOQUE">
+      <option value="B.06">
         B.06 - ESTOQUE
       </option>
 
-      <option value="B.07 - ESTOQUE">
+      <option value="B.07">
         B.07 - ESTOQUE
       </option>
 
-      <option value="B.08 - CONTROLADORIA">
+      <option value="B.08">
         B.08 - CONTROLADORIA
       </option>
 
-      <option value="B.09 - COWORKING">
+      <option value="B.09">
         B.09 - COWORKING
       </option>
 
-      <option value="B.10 - CORREDOR REUNIÃO">
+      <option value="B.10">
         B.10 - CORREDOR REUNIÃO
       </option>
 
-      <option value="B.11 - D.P">
+      <option value="B.11">
         B.11 - D.P
       </option>
 
-      <option value="B.12 - CORREDOR CALL CENTER">
+      <option value="B.12">
         B.12 - CORREDOR CALL CENTER
       </option>
 
-      <option value="B.13 - COMFORT ADM">
+      <option value="B.13">
         B.13 - COMFORT ADM
       </option>
 
-      <option value="B.14 - T.I">
+      <option value="B.14">
         B.14 - T.I
       </option>
 
-      <option value="B.15 - CTA ADM">
+      <option value="B.15">
         B.15 - CTA ADM
       </option>
 
-      <option value="B.16 - MARKETING / INFRAESTRUTURA">
+      <option value="B.16">
         B.16 - MARKETING / INFRAESTRUTURA
       </option>
 
-      <option value="B.17 - FATURAMENTO">
+      <option value="B.17">
         B.17 - FATURAMENTO
       </option>
 
-      <option value="B.18 - AUDITORIA">
+      <option value="B.18">
         B.18 - AUDITORIA
       </option>
 
-      <option value="B.19 - QUALIDADE">
+      <option value="B.19">
         B.19 - QUALIDADE
       </option>
 
@@ -324,7 +326,6 @@ button:disabled{
 
 
     <div class="options">
-
 
       <label class="option">
 
@@ -405,7 +406,6 @@ button:disabled{
 
       </label>
 
-
     </div>
 
 
@@ -423,6 +423,10 @@ button:disabled{
 
   </div>
 
+
+  <!-- =====================================================
+       SUCESSO
+       ===================================================== -->
 
   <div
     class="card success"
@@ -449,63 +453,73 @@ button:disabled{
 
   </div>
 
-
 </div>
 
 
 <script>
 
+/*
+==========================================================
+MAPA ÚNICO DOS QR CODES
+==========================================================
 
-// ============================================================
-// MAPA OFICIAL DOS QR CODES
-// ============================================================
+O código B.X é o identificador oficial.
+
+O HTML usa este mapa apenas para mostrar o nome.
+
+O Worker possui o MESMO mapa e valida novamente.
+
+==========================================================
+*/
 
 const LOCAIS = {
 
-  "B.01": "B.01 - DIRETORIA",
+  "B.01": "DIRETORIA",
 
-  "B.02": "B.02 - CORREDOR AUTORIZAÇÃO",
+  "B.02": "CORREDOR AUTORIZAÇÃO",
 
-  "B.03": "B.03 - FINANCEIRO",
+  "B.03": "FINANCEIRO",
 
-  "B.04": "B.04 - RH",
+  "B.04": "RH",
 
-  "B.05": "B.05 - COMPRAS",
+  "B.05": "COMPRAS",
 
-  "B.06": "B.06 - ESTOQUE",
+  "B.06": "ESTOQUE",
 
-  "B.07": "B.07 - ESTOQUE",
+  "B.07": "ESTOQUE",
 
-  "B.08": "B.08 - CONTROLADORIA",
+  "B.08": "CONTROLADORIA",
 
-  "B.09": "B.09 - COWORKING",
+  "B.09": "COWORKING",
 
-  "B.10": "B.10 - CORREDOR REUNIÃO",
+  "B.10": "CORREDOR REUNIÃO",
 
-  "B.11": "B.11 - D.P",
+  "B.11": "D.P",
 
-  "B.12": "B.12 - CORREDOR CALL CENTER",
+  "B.12": "CORREDOR CALL CENTER",
 
-  "B.13": "B.13 - COMFORT ADM",
+  "B.13": "COMFORT ADM",
 
-  "B.14": "B.14 - T.I",
+  "B.14": "T.I",
 
-  "B.15": "B.15 - CTA ADM",
+  "B.15": "CTA ADM",
 
-  "B.16": "B.16 - MARKETING / INFRAESTRUTURA",
+  "B.16": "MARKETING / INFRAESTRUTURA",
 
-  "B.17": "B.17 - FATURAMENTO",
+  "B.17": "FATURAMENTO",
 
-  "B.18": "B.18 - AUDITORIA",
+  "B.18": "AUDITORIA",
 
-  "B.19": "B.19 - QUALIDADE"
+  "B.19": "QUALIDADE"
 
 };
 
 
-// ============================================================
-// ELEMENTOS
-// ============================================================
+/*
+==========================================================
+ELEMENTOS
+==========================================================
+*/
 
 const localEl =
   document.getElementById("local");
@@ -534,9 +548,11 @@ const localCode =
   document.getElementById("localCode");
 
 
-// ============================================================
-// NOVA SOLICITAÇÃO
-// ============================================================
+/*
+==========================================================
+NOVA SOLICITAÇÃO
+==========================================================
+*/
 
 newRequest.addEventListener(
   "click",
@@ -544,36 +560,11 @@ newRequest.addEventListener(
 );
 
 
-// ============================================================
-// ATUALIZAÇÃO DO FORMULÁRIO
-// ============================================================
-
-function update(){
-
-  const selected =
-    [...boxes].filter(
-      b => b.checked
-    );
-
-  btn.disabled =
-    !localEl.value ||
-    selected.length === 0;
-
-  boxes.forEach(
-    b =>
-      b.closest(".option")
-       .classList.toggle(
-         "selected",
-         b.checked
-       )
-  );
-
-}
-
-
-// ============================================================
-// IDENTIFICAÇÃO DO QR CODE
-// ============================================================
+/*
+==========================================================
+IDENTIFICAÇÃO DO QR CODE
+==========================================================
+*/
 
 function identificarLocalPorQRCode(){
 
@@ -582,94 +573,191 @@ function identificarLocalPorQRCode(){
       window.location.search
     );
 
+
   const codigo =
     params.get("local");
 
+
+  /*
+  Se não existe ?local=...
+  deixa o usuário selecionar manualmente.
+  */
+
   if(!codigo){
+
     return;
+
   }
+
+
+  /*
+  Normaliza o código.
+  */
 
   const codigoNormalizado =
     codigo
-      .trim()
-      .toUpperCase();
+      .toUpperCase()
+      .trim();
 
-  const local =
+
+  /*
+  Procura no mapa.
+  */
+
+  const nomeLocal =
     LOCAIS[codigoNormalizado];
 
-  if(!local){
 
-    console.warn(
-      "Código de local inválido:",
+  /*
+  QR inválido.
+  */
+
+  if(!nomeLocal){
+
+    console.error(
+      "Código QR inválido:",
       codigoNormalizado
+    );
+
+    alert(
+      "Código de local inválido."
     );
 
     return;
 
   }
 
-  // Mostra o nome completo
-  localEl.value =
-    local;
 
-  // Impede alteração manual
+  /*
+  Seleciona o código correto.
+
+  IMPORTANTE:
+  O value do <option> é B.XX,
+  não o nome do local.
+  */
+
+  localEl.value =
+    codigoNormalizado;
+
+
+  /*
+  Impede alteração manual.
+
+  */
+
   localEl.disabled =
     true;
 
-  // Mostra o código do QR
+
+  /*
+  Mostra identificação.
+
+  */
+
   localCode.textContent =
     "📍 Local identificado pelo QR Code: " +
-    codigoNormalizado;
+    codigoNormalizado +
+    " - " +
+    nomeLocal;
+
 
   localCode.style.display =
     "block";
+
 
   update();
 
 }
 
 
-// ============================================================
-// EVENTOS
-// ============================================================
+/*
+==========================================================
+ATUALIZAÇÃO
+==========================================================
+*/
+
+function update(){
+
+  const selected =
+    [...boxes].filter(
+      b => b.checked
+    );
+
+
+  btn.disabled =
+    !localEl.value ||
+    selected.length === 0;
+
+
+  boxes.forEach(
+    b => {
+
+      b.closest(".option")
+        .classList.toggle(
+          "selected",
+          b.checked
+        );
+
+    }
+  );
+
+}
+
+
+/*
+==========================================================
+EVENTOS
+==========================================================
+*/
 
 localEl.addEventListener(
   "change",
   update
 );
 
+
 boxes.forEach(
-  b =>
+  b => {
+
     b.addEventListener(
       "change",
       update
-    )
+    );
+
+  }
 );
 
 
-// ============================================================
-// ENVIO
-// ============================================================
+/*
+==========================================================
+ENVIO
+==========================================================
+*/
 
 btn.addEventListener(
   "click",
   async () => {
 
-    const params =
-      new URLSearchParams(
-        window.location.search
-      );
 
-    const codigoURL =
-      params.get("local");
+    /*
+    Código B.XX
+    */
 
-    const localCodeQR =
-      codigoURL
-        ? codigoURL.trim().toUpperCase()
-        : null;
-
-    const local =
+    const local_code =
       localEl.value;
+
+
+    /*
+    Nome apenas para apresentação.
+    */
+
+    const nomeLocal =
+      LOCAIS[local_code];
+
+
+    /*
+    Itens selecionados.
+    */
 
     const selected =
       [...boxes]
@@ -681,17 +769,17 @@ btn.addEventListener(
         );
 
 
-    // ========================================================
-    // VALIDAÇÃO
-    // ========================================================
+    /*
+    Segurança local.
+    */
 
     if(
-      localCodeQR &&
-      !LOCAIS[localCodeQR]
+      !local_code ||
+      !LOCAIS[local_code]
     ){
 
       alert(
-        "Código do local inválido."
+        "Local inválido."
       );
 
       return;
@@ -699,10 +787,12 @@ btn.addEventListener(
     }
 
 
-    if(!local){
+    if(
+      selected.length === 0
+    ){
 
       alert(
-        "Selecione o local."
+        "Selecione o que precisa de atenção."
       );
 
       return;
@@ -710,16 +800,9 @@ btn.addEventListener(
     }
 
 
-    if(selected.length === 0){
-
-      alert(
-        "Selecione pelo menos uma opção."
-      );
-
-      return;
-
-    }
-
+    /*
+    Botão.
+    */
 
     btn.disabled =
       true;
@@ -728,38 +811,35 @@ btn.addEventListener(
       "ENVIANDO...";
 
 
-    // ========================================================
-    // PAYLOAD
-    // ========================================================
+    /*
+    ======================================================
+    PAYLOAD
+    ======================================================
+
+    O Worker recebe local_code.
+
+    O Worker NÃO confia no nome enviado pelo navegador.
+
+    ======================================================
+    */
 
     const payload = {
 
       local_code:
-        localCodeQR,
-
-      customer_id:
-        "appgrupocliged@gmail.com",
-
-      customer_id_type:
-        "E",
-
-      department_id:
-        "2d507dafee35b29d9e5852d9b0c4ce2c",
+        local_code,
 
       category_id:
         "52d32a3af1d7fd87c277f7aec520b38b",
 
       subject:
         "Solicitação - " +
-        local,
+        nomeLocal,
 
       message:
         "Local: " +
-        local +
+        nomeLocal +
         "\n\nSolicitação:\n- " +
-        selected.join(
-          "\n- "
-        ),
+        selected.join("\n- "),
 
       priority:
         "2"
@@ -773,11 +853,8 @@ btn.addEventListener(
     );
 
 
-    // ========================================================
-    // WORKER
-    // ========================================================
-
     try {
+
 
       const response =
         await fetch(
@@ -787,9 +864,11 @@ btn.addEventListener(
             method:
               "POST",
 
-            headers:{
+            headers: {
+
               "Content-Type":
                 "application/json"
+
             },
 
             body:
@@ -811,6 +890,12 @@ btn.addEventListener(
       );
 
 
+      /*
+      ====================================================
+      VERIFICAÇÃO
+      ====================================================
+      */
+
       if(
         !response.ok ||
         !result.sucesso
@@ -824,22 +909,24 @@ btn.addEventListener(
       }
 
 
-      // ======================================================
-      // SUCESSO
-      // ======================================================
+      /*
+      ====================================================
+      SUCESSO
+      ====================================================
+      */
 
       summary.innerHTML =
 
         "<strong>Local:</strong> " +
-        local +
+        local_code +
+        " - " +
+        nomeLocal +
 
         "<br><br>" +
 
         "<strong>Solicitação:</strong><br>" +
 
-        selected.join(
-          "<br>"
-        ) +
+        selected.join("<br>") +
 
         "<br><br>" +
 
@@ -854,6 +941,7 @@ btn.addEventListener(
       form.style.display =
         "none";
 
+
       success.style.display =
         "block";
 
@@ -861,18 +949,22 @@ btn.addEventListener(
     }
     catch(error){
 
+
       console.error(
         "Erro ao enviar solicitação:",
         error
       );
+
 
       alert(
         error.message ||
         "Não foi possível enviar a solicitação. Tente novamente."
       );
 
+
       btn.disabled =
         false;
+
 
       btn.textContent =
         "ENVIAR SOLICITAÇÃO";
@@ -883,18 +975,17 @@ btn.addEventListener(
 );
 
 
-// ============================================================
-// INICIALIZAÇÃO
-// ============================================================
+/*
+==========================================================
+INICIALIZAÇÃO
+==========================================================
+*/
 
 identificarLocalPorQRCode();
 
 update();
 
-
 </script>
 
-
 </body>
-
 </html>
