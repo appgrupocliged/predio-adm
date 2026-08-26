@@ -14,7 +14,7 @@
   --gold2:#d9ca70;
   --text:#f7f7f7;
   --muted:#b8b8b8;
-  --line:#3b3b3b
+  --line:#3b3b3b;
 }
 
 *{
@@ -90,9 +90,16 @@ select{
 select:disabled{
   opacity:1;
   color:#fff;
-  background:#171717;
+  background:#25231b;
   border-color:var(--gold2);
-  cursor:not-allowed
+}
+
+.local-code{
+  display:none;
+  text-align:center;
+  color:var(--gold);
+  font-size:13px;
+  margin-top:9px;
 }
 
 .options{
@@ -194,151 +201,135 @@ button:disabled{
     <h1>Avise nossa equipe</h1>
 
     <div class="subtitle">
-      Selecione o local e o que precisa de reposição ou limpeza.
+      Informe o que precisa de reposição ou limpeza.
     </div>
 
     <label class="title">📍 Local</label>
 
     <select id="local">
-
       <option value="">Selecione o local...</option>
 
-      <option value="DIRETORIA">Diretoria</option>
-
-      <option value="CORREDOR AUTORIZAÇÃO">
-        Corredor Autorização
+      <option value="B.01 - DIRETORIA">
+        B.01 - DIRETORIA
       </option>
 
-      <option value="FINANCEIRO">
-        Financeiro
+      <option value="B.02 - CORREDOR AUTORIZAÇÃO">
+        B.02 - CORREDOR AUTORIZAÇÃO
       </option>
 
-      <option value="RH">
-        RH
+      <option value="B.03 - FINANCEIRO">
+        B.03 - FINANCEIRO
       </option>
 
-      <option value="COMPRAS">
-        Compras
+      <option value="B.04 - RH">
+        B.04 - RH
       </option>
 
-      <option value="ESTOQUE">
-        Estoque
+      <option value="B.05 - COMPRAS">
+        B.05 - COMPRAS
       </option>
 
-      <option value="CONTROLADORIA">
-        Controladoria
+      <option value="B.06 - ESTOQUE">
+        B.06 - ESTOQUE
       </option>
 
-      <option value="COWORKING">
-        Coworking
+      <option value="B.07 - ESTOQUE">
+        B.07 - ESTOQUE
       </option>
 
-      <option value="CORREDOR REUNIÃO">
-        Corredor Reunião
+      <option value="B.08 - CONTROLADORIA">
+        B.08 - CONTROLADORIA
       </option>
 
-      <option value="D.P">
-        D.P
+      <option value="B.09 - COWORKING">
+        B.09 - COWORKING
       </option>
 
-      <option value="CORREDOR CALL CENTER">
-        Corredor Call Center
+      <option value="B.10 - CORREDOR REUNIÃO">
+        B.10 - CORREDOR REUNIÃO
       </option>
 
-      <option value="COMFORT ADM">
-        Comfort ADM
+      <option value="B.11 - D.P">
+        B.11 - D.P
       </option>
 
-      <option value="T.I">
-        T.I
+      <option value="B.12 - CORREDOR CALL CENTER">
+        B.12 - CORREDOR CALL CENTER
       </option>
 
-      <option value="CTA ADM">
-        CTA ADM
+      <option value="B.13 - COMFORT ADM">
+        B.13 - COMFORT ADM
       </option>
 
-      <option value="MARKETING / INFRAESTRUTURA">
-        Marketing / Infraestrutura
+      <option value="B.14 - T.I">
+        B.14 - T.I
       </option>
 
-      <option value="FATURAMENTO">
-        Faturamento
+      <option value="B.15 - CTA ADM">
+        B.15 - CTA ADM
       </option>
 
-      <option value="AUDITORIA">
-        Auditoria
+      <option value="B.16 - MARKETING / INFRAESTRUTURA">
+        B.16 - MARKETING / INFRAESTRUTURA
       </option>
 
-      <option value="QUALIDADE">
-        Qualidade
+      <option value="B.17 - FATURAMENTO">
+        B.17 - FATURAMENTO
+      </option>
+
+      <option value="B.18 - AUDITORIA">
+        B.18 - AUDITORIA
+      </option>
+
+      <option value="B.19 - HEAD">
+        B.19 - HEAD
       </option>
 
     </select>
 
+    <div class="local-code" id="localCode"></div>
 
     <label class="title">
       🛠️ O que precisa de atenção?
     </label>
 
-
     <div class="options">
 
       <label class="option">
-        <input
-          type="checkbox"
-          value="Papel higiênico"
-        >
+        <input type="checkbox" value="Papel higiênico">
         <span>🧻</span>
         <span>Papel higiênico</span>
       </label>
 
-
       <label class="option">
-        <input
-          type="checkbox"
-          value="Papel toalha"
-        >
+        <input type="checkbox" value="Papel toalha">
         <span>🧻</span>
         <span>Papel toalha</span>
       </label>
 
-
       <label class="option">
-        <input
-          type="checkbox"
-          value="Sabonete líquido"
-        >
+        <input type="checkbox" value="Sabonete líquido">
         <span>🧴</span>
         <span>Sabonete líquido</span>
       </label>
 
-
       <label class="option">
-        <input
-          type="checkbox"
-          value="Troca/retirada de lixo"
-        >
+        <input type="checkbox" value="Troca/retirada de lixo">
         <span>🗑️</span>
         <span>Troca/retirada de lixo</span>
       </label>
 
-
       <label class="option">
-        <input
-          type="checkbox"
-          value="Solicitar limpeza"
-        >
+        <input type="checkbox" value="Solicitar limpeza">
         <span>🧹</span>
         <span>Solicitar limpeza</span>
       </label>
 
     </div>
 
-
     <button id="send" disabled>
       ENVIAR SOLICITAÇÃO
     </button>
-
 
     <div class="note">
       Sua solicitação será registrada para atendimento.
@@ -346,16 +337,11 @@ button:disabled{
 
   </div>
 
-
   <div class="card success" id="success">
 
-    <div class="check">
-      ✓
-    </div>
+    <div class="check">✓</div>
 
-    <h2>
-      Solicitação enviada!
-    </h2>
+    <h2>Solicitação enviada!</h2>
 
     <p id="summary"></p>
 
@@ -371,108 +357,86 @@ button:disabled{
 
 </div>
 
-
 <script>
 
 /*
-====================================================
-MAPEAMENTO DOS QR CODES
-====================================================
-
-B.1  = DIRETORIA
-B.2  = CORREDOR AUTORIZAÇÃO
-B.3  = FINANCEIRO
-B.4  = RH
-B.5  = COMPRAS
-B.6  = ESTOQUE
-B.7  = ESTOQUE
-B.8  = CONTROLADORIA
-B.9  = COWORKING
-B.10 = CORREDOR REUNIÃO
-B.11 = D.P
-B.12 = CORREDOR CALL CENTER
-B.13 = COMFORT ADM
-B.14 = T.I
-B.15 = CTA ADM
-B.16 = MARKETING / INFRAESTRUTURA
-B.17 = FATURAMENTO
-B.18 = AUDITORIA
-B.19 = QUALIDADE
-
-====================================================
+==================================================
+CONFIGURAÇÃO DOS LOCAIS
+==================================================
 */
 
-const locaisQR = {
+const LOCAIS = {
 
-  "B.1": "DIRETORIA",
+  "B.01": "B.01 - DIRETORIA",
 
-  "B.2": "CORREDOR AUTORIZAÇÃO",
+  "B.02": "B.02 - CORREDOR AUTORIZAÇÃO",
 
-  "B.3": "FINANCEIRO",
+  "B.03": "B.03 - FINANCEIRO",
 
-  "B.4": "RH",
+  "B.04": "B.04 - RH",
 
-  "B.5": "COMPRAS",
+  "B.05": "B.05 - COMPRAS",
 
-  "B.6": "ESTOQUE",
+  "B.06": "B.06 - ESTOQUE",
 
-  "B.7": "ESTOQUE",
+  "B.07": "B.07 - ESTOQUE",
 
-  "B.8": "CONTROLADORIA",
+  "B.08": "B.08 - CONTROLADORIA",
 
-  "B.9": "COWORKING",
+  "B.09": "B.09 - COWORKING",
 
-  "B.10": "CORREDOR REUNIÃO",
+  "B.10": "B.10 - CORREDOR REUNIÃO",
 
-  "B.11": "D.P",
+  "B.11": "B.11 - D.P",
 
-  "B.12": "CORREDOR CALL CENTER",
+  "B.12": "B.12 - CORREDOR CALL CENTER",
 
-  "B.13": "COMFORT ADM",
+  "B.13": "B.13 - COMFORT ADM",
 
-  "B.14": "T.I",
+  "B.14": "B.14 - T.I",
 
-  "B.15": "CTA ADM",
+  "B.15": "B.15 - CTA ADM",
 
-  "B.16": "MARKETING / INFRAESTRUTURA",
+  "B.16": "B.16 - MARKETING / INFRAESTRUTURA",
 
-  "B.17": "FATURAMENTO",
+  "B.17": "B.17 - FATURAMENTO",
 
-  "B.18": "AUDITORIA",
+  "B.18": "B.18 - AUDITORIA",
 
-  "B.19": "QUALIDADE"
+  "B.19": "B.19 - HEAD"
 
 };
 
 
-const localEl =
-  document.getElementById("local");
+/*
+==================================================
+ELEMENTOS
+==================================================
+*/
 
-const boxes =
-  document.querySelectorAll(
-    'input[type="checkbox"]'
-  );
+const localEl = document.getElementById("local");
 
-const btn =
-  document.getElementById("send");
+const boxes = document.querySelectorAll(
+  'input[type="checkbox"]'
+);
 
-const form =
-  document.getElementById("form");
+const btn = document.getElementById("send");
 
-const success =
-  document.getElementById("success");
+const form = document.getElementById("form");
 
-const summary =
-  document.getElementById("summary");
+const success = document.getElementById("success");
 
-const newRequest =
-  document.getElementById("newRequest");
+const summary = document.getElementById("summary");
+
+const newRequest = document.getElementById("newRequest");
+
+const localCode = document.getElementById("localCode");
 
 
 /*
-====================================================
+==================================================
 NOVA SOLICITAÇÃO
-====================================================
+==================================================
 */
 
 newRequest.addEventListener(
@@ -482,9 +446,70 @@ newRequest.addEventListener(
 
 
 /*
-====================================================
+==================================================
+IDENTIFICA QR CODE
+==================================================
+*/
+
+function identificarLocalPorQRCode(){
+
+  const params = new URLSearchParams(
+    window.location.search
+  );
+
+  const codigo = params.get("local");
+
+  if(!codigo){
+    return;
+  }
+
+  const codigoNormalizado =
+    codigo.toUpperCase().trim();
+
+  const local =
+    LOCAIS[codigoNormalizado];
+
+  if(!local){
+
+    console.warn(
+      "Código de local não encontrado:",
+      codigoNormalizado
+    );
+
+    return;
+  }
+
+  /*
+  Seleciona automaticamente o local
+  */
+
+  localEl.value = local;
+
+  /*
+  Impede alteração quando veio pelo QR Code
+  */
+
+  localEl.disabled = true;
+
+  /*
+  Mostra o código utilizado
+  */
+
+  localCode.textContent =
+    "📍 Local identificado pelo QR Code: " +
+    codigoNormalizado;
+
+  localCode.style.display = "block";
+
+  update();
+
+}
+
+
+/*
+==================================================
 ATUALIZAÇÃO DO FORMULÁRIO
-====================================================
+==================================================
 */
 
 function update(){
@@ -498,31 +523,28 @@ function update(){
     !localEl.value ||
     selected.length === 0;
 
-
-  boxes.forEach(b => {
-
-    b.closest(".option")
-      .classList.toggle(
-        "selected",
-        b.checked
-      );
-
-  });
+  boxes.forEach(
+    b =>
+      b.closest(".option")
+       .classList.toggle(
+         "selected",
+         b.checked
+       )
+  );
 
 }
 
 
 /*
-====================================================
+==================================================
 EVENTOS
-====================================================
+==================================================
 */
 
 localEl.addEventListener(
   "change",
   update
 );
-
 
 boxes.forEach(
   b =>
@@ -534,53 +556,9 @@ boxes.forEach(
 
 
 /*
-====================================================
-IDENTIFICAÇÃO DO QR CODE
-====================================================
-
-Quando alguém acessar:
-
-https://appgrupocliged.github.io/predio-adm/?local=B.14
-
-o sistema identifica B.14 e transforma
-automaticamente em T.I.
-
-====================================================
-*/
-
-const params =
-  new URLSearchParams(
-    window.location.search
-  );
-
-const codigoLocal =
-  params.get("local");
-
-
-if (
-  codigoLocal &&
-  locaisQR[codigoLocal]
-) {
-
-  localEl.value =
-    locaisQR[codigoLocal];
-
-  /*
-  Impede que o usuário altere o local
-  quando o acesso veio de um QR Code.
-  */
-
-  localEl.disabled = true;
-
-  update();
-
-}
-
-
-/*
-====================================================
+==================================================
 ENVIO DA SOLICITAÇÃO
-====================================================
+==================================================
 */
 
 btn.addEventListener(
@@ -590,16 +568,10 @@ btn.addEventListener(
     const local =
       localEl.value;
 
-
     const selected =
       [...boxes]
-        .filter(
-          b => b.checked
-        )
-        .map(
-          b => b.value
-        );
-
+        .filter(b => b.checked)
+        .map(b => b.value);
 
     btn.disabled = true;
 
@@ -608,9 +580,9 @@ btn.addEventListener(
 
 
     /*
-    ================================================
-    PAYLOAD ENVIADO PARA O WORKER
-    ================================================
+    ==============================================
+    PAYLOAD
+    ==============================================
     */
 
     const payload = {
@@ -633,8 +605,8 @@ btn.addEventListener(
       message:
         "Local: " +
         local +
-        "\n\nSolicitação:\n- " +
-        selected.join("\n- "),
+        "\\n\\nSolicitação:\\n- " +
+        selected.join("\\n- "),
 
       priority:
         "2"
@@ -642,13 +614,13 @@ btn.addEventListener(
     };
 
 
-    try {
+    /*
+    ==============================================
+    ENVIO PARA O CLOUDFLARE WORKER
+    ==============================================
+    */
 
-      /*
-      ==============================================
-      WORKER / API
-      ==============================================
-      */
+    try {
 
       const response =
         await fetch(
@@ -662,9 +634,7 @@ btn.addEventListener(
             },
 
             body:
-              JSON.stringify(
-                payload
-              )
+              JSON.stringify(payload)
           }
         );
 
@@ -674,15 +644,15 @@ btn.addEventListener(
 
 
       /*
-      ==============================================
-      VERIFICAÇÃO DO RETORNO
-      ==============================================
+      ============================================
+      VERIFICAÇÃO
+      ============================================
       */
 
-      if (
+      if(
         !response.ok ||
         !result.sucesso
-      ) {
+      ){
 
         throw new Error(
           result.mensagem ||
@@ -693,9 +663,9 @@ btn.addEventListener(
 
 
       /*
-      ==============================================
-      TELA DE SUCESSO
-      ==============================================
+      ============================================
+      SUCESSO
+      ============================================
       */
 
       summary.innerHTML =
@@ -706,15 +676,14 @@ btn.addEventListener(
         "<br><br>" +
 
         "<strong>Solicitação:</strong><br>" +
-
         selected.join("<br>") +
 
         "<br><br>" +
 
         "<strong>Data:</strong> " +
-
-        new Date()
-          .toLocaleString("pt-BR");
+        new Date().toLocaleString(
+          "pt-BR"
+        );
 
 
       form.style.display =
@@ -723,22 +692,17 @@ btn.addEventListener(
       success.style.display =
         "block";
 
-    }
 
-
-    catch(error) {
+    } catch(error) {
 
       console.error(error);
-
 
       alert(
         "Não foi possível enviar a solicitação. Tente novamente."
       );
 
-
       btn.disabled =
         false;
-
 
       btn.textContent =
         "ENVIAR SOLICITAÇÃO";
@@ -747,6 +711,17 @@ btn.addEventListener(
 
   }
 );
+
+
+/*
+==================================================
+INICIALIZAÇÃO
+==================================================
+*/
+
+identificarLocalPorQRCode();
+
+update();
 
 </script>
 
