@@ -1,0 +1,526 @@
+```html
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0"
+>
+
+<title>Grupo CLIGED | Conclusão</title>
+
+<style>
+
+:root{
+  --bg:#101010;
+  --card:#1b1b1b;
+  --gold:#f1e7a8;
+  --gold2:#d9ca70;
+  --text:#f7f7f7;
+  --muted:#b8b8b8;
+  --line:#3b3b3b;
+}
+
+*{
+  box-sizing:border-box;
+}
+
+body{
+  margin:0;
+  background:var(--bg);
+  font-family:Arial,sans-serif;
+  color:var(--text);
+}
+
+.container{
+  max-width:500px;
+  min-height:100vh;
+  margin:auto;
+  padding:26px 18px 34px;
+}
+
+.logo-wrap{
+  text-align:center;
+  margin:5px 0 22px;
+}
+
+.logo{
+  width:150px;
+  max-width:60%;
+  height:auto;
+}
+
+.card{
+  background:var(--card);
+  border:1px solid #2c2c2c;
+  border-radius:20px;
+  padding:22px;
+  box-shadow:0 12px 35px #0008;
+}
+
+h1{
+  text-align:center;
+  color:var(--gold);
+  font-size:24px;
+  margin:0 0 8px;
+}
+
+.subtitle{
+  text-align:center;
+  color:var(--muted);
+  font-size:14px;
+  line-height:1.45;
+  margin-bottom:22px;
+}
+
+.info{
+  border:1px solid var(--line);
+  border-radius:11px;
+  padding:14px;
+  background:#151515;
+  margin-bottom:18px;
+}
+
+.info strong{
+  color:var(--gold);
+}
+
+label{
+  display:block;
+  color:var(--gold);
+  font-weight:bold;
+  font-size:15px;
+  margin:18px 0 9px;
+}
+
+input{
+  width:100%;
+  padding:14px 12px;
+  border-radius:11px;
+  border:1px solid var(--line);
+  background:#111;
+  color:#fff;
+  font-size:15px;
+}
+
+button{
+  width:100%;
+  border:0;
+  border-radius:12px;
+  padding:15px;
+  margin-top:22px;
+  background:var(--gold);
+  color:#151515;
+  font-size:15px;
+  font-weight:800;
+  cursor:pointer;
+}
+
+button:disabled{
+  opacity:.45;
+  cursor:not-allowed;
+}
+
+.note{
+  text-align:center;
+  color:#888;
+  font-size:12px;
+  margin-top:13px;
+}
+
+.success{
+  display:none;
+  text-align:center;
+}
+
+.check{
+  font-size:58px;
+  color:var(--gold);
+}
+
+.success h2{
+  color:var(--gold);
+}
+
+.success p{
+  color:var(--muted);
+  line-height:1.6;
+}
+
+.error{
+  display:none;
+  text-align:center;
+  color:#ff8b8b;
+  line-height:1.5;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+  <div class="logo-wrap">
+
+    <img
+      class="logo"
+      src="logo.png"
+      alt="Grupo CLIGED"
+    >
+
+  </div>
+
+
+  <!-- =====================================================
+       CONCLUSÃO
+       ===================================================== -->
+
+  <div
+    class="card"
+    id="card"
+  >
+
+    <h1>
+      Concluir solicitação
+    </h1>
+
+    <div class="subtitle">
+      Confirme que a solicitação foi realizada.
+    </div>
+
+
+    <div
+      class="info"
+      id="info"
+    >
+      Carregando solicitação...
+    </div>
+
+
+    <label for="nome">
+      👤 Nome da colaboradora
+    </label>
+
+
+    <input
+      type="text"
+      id="nome"
+      placeholder="Digite seu nome"
+      autocomplete="name"
+    >
+
+
+    <button
+      id="concluir"
+      disabled
+    >
+      CONCLUIR SOLICITAÇÃO
+    </button>
+
+
+    <div class="note">
+      Ao confirmar, o atendimento será registrado no chamado.
+    </div>
+
+  </div>
+
+
+  <!-- =====================================================
+       SUCESSO
+       ===================================================== -->
+
+  <div
+    class="card success"
+    id="success"
+  >
+
+    <div class="check">
+      ✓
+    </div>
+
+    <h2>
+      Solicitação concluída!
+    </h2>
+
+    <p id="successMessage"></p>
+
+  </div>
+
+
+  <!-- =====================================================
+       ERRO
+       ===================================================== -->
+
+  <div
+    class="card error"
+    id="error"
+  >
+
+    <h2>
+      Não foi possível carregar
+    </h2>
+
+    <p id="errorMessage"></p>
+
+  </div>
+
+</div>
+
+
+<script>
+
+/*
+==========================================================
+CONFIGURAÇÃO
+==========================================================
+*/
+
+const API =
+  "https://predio-adm-api.appgrupocliged.workers.dev";
+
+
+/*
+==========================================================
+ELEMENTOS
+==========================================================
+*/
+
+const card =
+  document.getElementById("card");
+
+const success =
+  document.getElementById("success");
+
+const error =
+  document.getElementById("error");
+
+const info =
+  document.getElementById("info");
+
+const errorMessage =
+  document.getElementById("errorMessage");
+
+const successMessage =
+  document.getElementById("successMessage");
+
+const nome =
+  document.getElementById("nome");
+
+const concluir =
+  document.getElementById("concluir");
+
+
+/*
+==========================================================
+ID DO CHAMADO
+==========================================================
+
+O link deverá futuramente receber:
+
+?id=ID_INTERNO_DO_TOMTICKET
+
+Exemplo:
+
+?id=641db2fa444862d1cdedcd21e50f2348
+
+==========================================================
+*/
+
+const params =
+  new URLSearchParams(
+    window.location.search
+  );
+
+
+const ticketId =
+  params.get("id");
+
+
+/*
+==========================================================
+VALIDAÇÃO INICIAL
+==========================================================
+*/
+
+if(!ticketId){
+
+  card.style.display =
+    "none";
+
+  error.style.display =
+    "block";
+
+  errorMessage.textContent =
+    "O identificador da solicitação não foi informado.";
+
+}
+
+
+/*
+==========================================================
+HABILITA BOTÃO
+==========================================================
+*/
+
+nome.addEventListener(
+  "input",
+  () => {
+
+    concluir.disabled =
+      nome.value.trim().length < 2;
+
+  }
+);
+
+
+/*
+==========================================================
+CONCLUSÃO
+==========================================================
+*/
+
+concluir.addEventListener(
+  "click",
+  async () => {
+
+    const nomeColaboradora =
+      nome.value.trim();
+
+
+    if(
+      !ticketId ||
+      nomeColaboradora.length < 2
+    ){
+
+      return;
+
+    }
+
+
+    concluir.disabled =
+      true;
+
+    concluir.textContent =
+      "ENVIANDO...";
+
+
+    /*
+    ======================================================
+    ENVIA PARA O WORKER
+    ======================================================
+    */
+
+    try{
+
+      const response =
+        await fetch(
+          API + "/concluir",
+          {
+
+            method:
+              "POST",
+
+            headers: {
+
+              "Content-Type":
+                "application/json"
+
+            },
+
+            body:
+              JSON.stringify({
+
+                ticket_id:
+                  ticketId,
+
+                nome:
+                  nomeColaboradora
+
+              })
+
+          }
+        );
+
+
+      const result =
+        await response.json();
+
+
+      console.log(
+        "Resposta da API:",
+        result
+      );
+
+
+      if(
+        !response.ok ||
+        !result.sucesso
+      ){
+
+        throw new Error(
+          result.mensagem ||
+          "Não foi possível concluir a solicitação."
+        );
+
+      }
+
+
+      /*
+      ====================================================
+      SUCESSO
+      ====================================================
+      */
+
+      card.style.display =
+        "none";
+
+
+      success.style.display =
+        "block";
+
+
+      successMessage.innerHTML =
+
+        "Responsável: <strong>" +
+        nomeColaboradora +
+        "</strong><br><br>" +
+
+        "O chamado foi atualizado com a conclusão.";
+
+    }
+    catch(err){
+
+      console.error(
+        "Erro:",
+        err
+      );
+
+
+      alert(
+        err.message ||
+        "Não foi possível concluir a solicitação."
+      );
+
+
+      concluir.disabled =
+        false;
+
+      concluir.textContent =
+        "CONCLUIR SOLICITAÇÃO";
+
+    }
+
+  }
+);
+
+</script>
+
+</body>
+</html>
+```
