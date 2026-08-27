@@ -782,6 +782,58 @@ boxes.forEach(
 
 /*
 ==========================================================
+VERIFICA SE O STATUS É DE CONCLUSÃO
+==========================================================
+*/
+
+function statusFoiConcluido(
+  status
+){
+
+  if(!status){
+
+    return false;
+
+  }
+
+
+  const normalizado =
+    String(
+      status
+    )
+    .trim()
+    .toUpperCase();
+
+
+  return (
+
+    normalizado.includes(
+      "CLOSED"
+    ) ||
+
+    normalizado.includes(
+      "FINISHED"
+    ) ||
+
+    normalizado.includes(
+      "CONCLU"
+    ) ||
+
+    normalizado.includes(
+      "FINALIZ"
+    ) ||
+
+    normalizado.includes(
+      "RESOLV"
+    )
+
+  );
+
+}
+
+
+/*
+==========================================================
 FORMATA STATUS
 ==========================================================
 */
@@ -814,21 +866,14 @@ function mostrarStatus(
 
 
   /*
+  ========================================================
   STATUS DE CONCLUSÃO
+  ========================================================
   */
 
   if(
-    normalizado.includes(
-      "CLOSED"
-    ) ||
-    normalizado.includes(
-      "CONCLU"
-    ) ||
-    normalizado.includes(
-      "FINALIZ"
-    ) ||
-    normalizado.includes(
-      "RESOLV"
+    statusFoiConcluido(
+      valor
     )
   ){
 
@@ -844,7 +889,9 @@ function mostrarStatus(
 
 
   /*
+  ========================================================
   STATUS AGUARDANDO CLIENTE
+  ========================================================
   */
 
   if(
@@ -872,7 +919,9 @@ function mostrarStatus(
 
 
   /*
+  ========================================================
   STATUS NORMAL
+  ========================================================
   */
 
   statusValue.textContent =
@@ -890,13 +939,9 @@ function mostrarStatus(
 CONSULTA STATUS
 ==========================================================
 
-IMPORTANTE:
-
-O Worker precisa disponibilizar:
+O Worker disponibiliza:
 
 GET /status?id=ID_DO_CHAMADO
-
-O index consulta essa rota periodicamente.
 
 ==========================================================
 */
@@ -956,8 +1001,9 @@ async function consultarStatus(){
 
 
     /*
-    Procura o campo de status
-    retornado pelo Worker.
+    ======================================================
+    PEGA O STATUS
+    ======================================================
     */
 
     const status =
@@ -968,6 +1014,12 @@ async function consultarStatus(){
       result.data?.status_name ||
       result.data?.statusName;
 
+
+    /*
+    ======================================================
+    MOSTRA STATUS
+    ======================================================
+    */
 
     mostrarStatus(
       status
@@ -983,36 +1035,30 @@ async function consultarStatus(){
 
 
     /*
-    Se estiver concluído,
-    para a consulta automática.
+    ======================================================
+    SE ESTIVER CONCLUÍDO, PARA A CONSULTA
+    ======================================================
     */
 
     if(
-      status &&
-      (
-        String(status)
-          .toUpperCase()
-          .includes("CLOSED") ||
-
-        String(status)
-          .toUpperCase()
-          .includes("CONCLU") ||
-
-        String(status)
-          .toUpperCase()
-          .includes("FINALIZ") ||
-
-        String(status)
-          .toUpperCase()
-          .includes("RESOLV")
+      statusFoiConcluido(
+        status
       )
     ){
+
+      console.log(
+        "Chamado concluído. Monitoramento encerrado."
+      );
+
 
       if(statusInterval){
 
         clearInterval(
           statusInterval
         );
+
+        statusInterval =
+          null;
 
       }
 
