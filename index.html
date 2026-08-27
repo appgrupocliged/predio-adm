@@ -197,7 +197,7 @@ button:disabled{
 }
 
 .status-value{
-  font-size:15px;
+  font-size:14px;
   line-height:1.5;
   color:#fff;
   word-break:break-word;
@@ -469,7 +469,7 @@ button:disabled{
 
 
   <!-- =====================================================
-       SUCESSO
+       TELA DE SUCESSO
        ===================================================== -->
 
   <div
@@ -530,7 +530,7 @@ button:disabled{
 
 /*
 ==========================================================
-MAPA OFICIAL DOS QR CODES
+MAPA ÚNICO DOS QR CODES
 ==========================================================
 */
 
@@ -782,7 +782,15 @@ boxes.forEach(
 
 /*
 ==========================================================
-FORMATA STATUS PARA O SOLICITANTE
+FORMATA STATUS
+==========================================================
+
+O Worker continua retornando o status REAL
+do TomTicket.
+
+Aqui apenas traduzimos o status para uma
+mensagem simples para o solicitante.
+
 ==========================================================
 */
 
@@ -793,10 +801,10 @@ function mostrarStatus(
   if(!status){
 
     statusValue.textContent =
-      "🔵 Em andamento";
+      "🟡 Enviada";
 
     statusValue.className =
-      "status-value";
+      "status-value status-warning";
 
     return;
 
@@ -815,7 +823,7 @@ function mostrarStatus(
 
   /*
   ========================================================
-  STATUS FINALIZADO
+  CHAMADO FINALIZADO
   ========================================================
   */
 
@@ -850,47 +858,29 @@ function mostrarStatus(
 
   /*
   ========================================================
-  STATUS DE ATENDIMENTO / RESPOSTA
+  QUALQUER STATUS NÃO FINALIZADO
   ========================================================
-  */
 
-  if(
-    normalizado.includes(
-      "AWAITING"
-    ) ||
-    normalizado.includes(
-      "CUSTOMER"
-    ) ||
-    normalizado.includes(
-      "RESPONDED"
-    ) ||
-    normalizado.includes(
-      "ANSWERED"
-    )
-  ){
+  Exemplos:
 
-    statusValue.textContent =
-      "🟡 Em atendimento";
+  Em atendimento
+  Answered by customer, awaiting response
+  Responded, awaiting response from customer
+  Open
+  In progress
 
-    statusValue.className =
-      "status-value status-warning";
+  Tudo será mostrado simplesmente como:
 
-    return;
+  🟡 Enviada
 
-  }
-
-
-  /*
-  ========================================================
-  OUTROS STATUS
   ========================================================
   */
 
   statusValue.textContent =
-    "🔵 Em andamento";
+    "🟡 Enviada";
 
   statusValue.className =
-    "status-value";
+    "status-value status-warning";
 
 }
 
@@ -898,6 +888,14 @@ function mostrarStatus(
 /*
 ==========================================================
 CONSULTA STATUS
+==========================================================
+
+O Worker disponibiliza:
+
+GET /status?id=ID_DO_CHAMADO
+
+O index continua consultando periodicamente.
+
 ==========================================================
 */
 
@@ -956,9 +954,8 @@ async function consultarStatus(){
 
 
     /*
-    ======================================================
-    PEGA O STATUS RETORNADO PELO WORKER
-    ======================================================
+    Procura o campo de status
+    retornado pelo Worker.
     */
 
     const status =
@@ -984,9 +981,8 @@ async function consultarStatus(){
 
 
     /*
-    ======================================================
-    SE FINALIZADO, PARA A CONSULTA
-    ======================================================
+    Se estiver concluído,
+    para a consulta automática.
     */
 
     if(
@@ -1034,16 +1030,18 @@ async function consultarStatus(){
 
 
     /*
-    ======================================================
-    NÃO MOSTRA ERRO TÉCNICO PARA O SOLICITANTE
-    ======================================================
+    Em caso de falha temporária,
+    não mostramos detalhes técnicos
+    para o solicitante.
+
+    Mantemos uma mensagem simples.
     */
 
     statusValue.textContent =
-      "🔵 Em andamento";
+      "🟡 Enviada";
 
     statusValue.className =
-      "status-value";
+      "status-value status-warning";
 
   }
 
@@ -1066,7 +1064,7 @@ function iniciarAtualizacaoStatus(){
 
 
   /*
-  Consulta a cada 10 segundos.
+  Depois consulta a cada 10 segundos.
   */
 
   statusInterval =
@@ -1143,6 +1141,12 @@ btn.addEventListener(
       "ENVIANDO...";
 
 
+    /*
+    ======================================================
+    PAYLOAD
+    ======================================================
+    */
+
     const payload = {
 
       local_code:
@@ -1176,6 +1180,12 @@ btn.addEventListener(
     try {
 
 
+      /*
+      ====================================================
+      ENVIA PARA O WORKER
+      ====================================================
+      */
+
       const response =
         await fetch(
 
@@ -1204,6 +1214,12 @@ btn.addEventListener(
         );
 
 
+      /*
+      ====================================================
+      LÊ RESPOSTA
+      ====================================================
+      */
+
       const result =
         await response.json();
 
@@ -1213,6 +1229,12 @@ btn.addEventListener(
         result
       );
 
+
+      /*
+      ====================================================
+      VERIFICAÇÃO
+      ====================================================
+      */
 
       if(
         !response.ok ||
@@ -1228,9 +1250,16 @@ btn.addEventListener(
 
 
       /*
-      ======================================================
+      ====================================================
       PEGA O ID DO CHAMADO
-      ======================================================
+      ====================================================
+
+      O ID continua sendo guardado internamente
+      para consulta do status.
+
+      Ele NÃO é mostrado na tela.
+
+      ====================================================
       */
 
       ticketId =
@@ -1247,13 +1276,9 @@ btn.addEventListener(
 
 
       /*
-      ======================================================
-      RESUMO PARA O SOLICITANTE
-      ======================================================
-      
-      O número do chamado NÃO é mais mostrado.
-      
-      ======================================================
+      ====================================================
+      RESUMO DA SOLICITAÇÃO
+      ====================================================
       */
 
       summary.innerHTML =
@@ -1279,6 +1304,12 @@ btn.addEventListener(
           );
 
 
+      /*
+      ====================================================
+      MOSTRA TELA DE SUCESSO
+      ====================================================
+      */
+
       form.style.display =
         "none";
 
@@ -1288,36 +1319,27 @@ btn.addEventListener(
 
 
       /*
-      ======================================================
+      ====================================================
       STATUS INICIAL
-      ======================================================
+      ====================================================
       */
 
       statusValue.textContent =
-        "🔄 Consultando status...";
+        "🟡 Enviada";
 
       statusValue.className =
-        "status-value status-loading";
+        "status-value status-warning";
 
 
       /*
-      ======================================================
+      ====================================================
       COMEÇA MONITORAMENTO
-      ======================================================
+      ====================================================
       */
 
       if(ticketId){
 
         iniciarAtualizacaoStatus();
-
-      }
-      else{
-
-        statusValue.textContent =
-          "🔵 Em andamento";
-
-        statusValue.className =
-          "status-value";
 
       }
 
@@ -1340,7 +1362,6 @@ btn.addEventListener(
 
       btn.disabled =
         false;
-
 
       btn.textContent =
         "ENVIAR SOLICITAÇÃO";
