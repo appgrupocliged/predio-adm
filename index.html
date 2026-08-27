@@ -187,6 +187,44 @@ button:disabled{
   border:1px solid #5a5332;
 }
 
+
+/* ==========================================================
+   STATUS DA SOLICITAÇÃO
+   ========================================================== */
+
+.status-box{
+  margin-top:20px;
+  padding:16px;
+  border:1px solid #3b3b3b;
+  border-radius:14px;
+  background:#111;
+  text-align:center;
+}
+
+.status-label{
+  color:#999;
+  font-size:12px;
+  margin-bottom:7px;
+}
+
+.status-value{
+  color:var(--gold);
+  font-size:17px;
+  font-weight:800;
+  line-height:1.4;
+}
+
+.ticket-number{
+  color:#888;
+  font-size:12px;
+  margin-top:7px;
+}
+
+.status-loading{
+  color:#aaa;
+  font-size:13px;
+}
+
 </style>
 
 </head>
@@ -443,6 +481,35 @@ button:disabled{
 
     <p id="summary"></p>
 
+
+    <!-- ===================================================
+         STATUS
+         =================================================== -->
+
+    <div
+      class="status-box"
+      id="statusBox"
+    >
+
+      <div class="status-label">
+        STATUS DA SOLICITAÇÃO
+      </div>
+
+      <div
+        class="status-value"
+        id="statusValue"
+      >
+        Consultando...
+      </div>
+
+      <div
+        class="ticket-number"
+        id="ticketNumber"
+      ></div>
+
+    </div>
+
+
     <button
       class="reset"
       type="button"
@@ -547,6 +614,21 @@ const newRequest =
 const localCode =
   document.getElementById("localCode");
 
+const statusValue =
+  document.getElementById("statusValue");
+
+const ticketNumber =
+  document.getElementById("ticketNumber");
+
+
+/*
+==========================================================
+CONTROLE DO STATUS
+==========================================================
+*/
+
+let statusTimer = null;
+
 
 /*
 ==========================================================
@@ -556,7 +638,22 @@ NOVA SOLICITAÇÃO
 
 newRequest.addEventListener(
   "click",
-  () => location.reload()
+  () => {
+
+    if(statusTimer){
+
+      clearInterval(
+        statusTimer
+      );
+
+      statusTimer =
+        null;
+
+    }
+
+    location.reload();
+
+  }
 );
 
 
@@ -642,7 +739,6 @@ function identificarLocalPorQRCode(){
 
   /*
   Impede alteração manual.
-
   */
 
   localEl.disabled =
@@ -651,7 +747,6 @@ function identificarLocalPorQRCode(){
 
   /*
   Mostra identificação.
-
   */
 
   localCode.textContent =
@@ -700,6 +795,138 @@ function update(){
 
     }
   );
+
+}
+
+
+/*
+==========================================================
+ CONSULTA STATUS DO CHAMADO
+==========================================================
+*/
+
+async function atualizarStatus(ticket_id){
+
+  if(!ticket_id){
+
+    return;
+
+  }
+
+
+  try {
+
+    const response =
+      await fetch(
+
+        "https://predio-adm-api.appgrupocliged.workers.dev/status?ticket_id=" +
+        encodeURIComponent(
+          ticket_id
+        )
+
+      );
+
+
+    const result =
+      await response.json();
+
+
+    console.log(
+      "Status da solicitação:",
+      result
+    );
+
+
+    if(
+      !response.ok ||
+      !result.sucesso
+    ){
+
+      statusValue.textContent =
+        "Não foi possível consultar";
+
+
+      return;
+
+    }
+
+
+    /*
+    ==================================================
+    CHAMADO CONCLUÍDO
+    ==================================================
+    */
+
+    if(
+      result.concluido
+    ){
+
+      statusValue.textContent =
+        "🟢 SOLICITAÇÃO CONCLUÍDA";
+
+
+      if(statusTimer){
+
+        clearInterval(
+          statusTimer
+        );
+
+        statusTimer =
+          null;
+
+      }
+
+
+      return;
+
+    }
+
+
+    /*
+    ==================================================
+    STATUS DO TOMTICKET
+    ==================================================
+    */
+
+    const status =
+      String(
+        result.status || ""
+      ).toLowerCase();
+
+
+    if(
+      status.includes("atendimento") ||
+      status.includes("andamento") ||
+      status.includes("atendendo")
+    ){
+
+      statusValue.textContent =
+        "🟠 EM ATENDIMENTO";
+
+    }
+    else
+    {
+
+      statusValue.textContent =
+        "🟡 " +
+        (
+          result.status ||
+          "AGUARDANDO ATENDIMENTO"
+        )
+        .toUpperCase();
+
+    }
+
+
+  }
+  catch(error){
+
+    console.error(
+      "Erro ao consultar status:",
+      error
+    );
+
+  }
 
 }
 
@@ -911,6 +1138,31 @@ btn.addEventListener(
 
       /*
       ====================================================
+      PEGA O TICKET ID
+      ====================================================
+      */
+
+      const ticket_id =
+        result.ticket_id;
+
+
+      if(!ticket_id){
+
+        throw new Error(
+          "O chamado foi criado, mas o número do chamado não foi recebido."
+        );
+
+      }
+
+
+      console.log(
+        "Chamado criado:",
+        ticket_id
+      );
+
+
+      /*
+      ====================================================
       SUCESSO
       ====================================================
       */
@@ -938,12 +1190,79 @@ btn.addEventListener(
           );
 
 
+      /*
+      ====================================================
+      MOSTRA NÚMERO DO CHAMADO
+      ====================================================
+      */
+
+      ticketNumber.textContent =
+        "Chamado #" +
+        ticket_id;
+
+
+      /*
+      ====================================================
+      MOSTRA TELA DE SUCESSO
+      ====================================================
+      */
+
       form.style.display =
         "none";
 
 
       success.style.display =
         "block";
+
+
+      /*
+      ====================================================
+      CONSULTA STATUS IMEDIATAMENTE
+      ====================================================
+      */
+
+      statusValue.textContent =
+        "🟡 AGUARDANDO ATENDIMENTO";
+
+
+      await atualizarStatus(
+        ticket_id
+      );
+
+
+      /*
+      ====================================================
+      ATUALIZA AUTOMATICAMENTE
+      ====================================================
+
+      Consulta novamente a cada 10 segundos.
+
+      ====================================================
+      */
+
+      if(statusTimer){
+
+        clearInterval(
+          statusTimer
+        );
+
+      }
+
+
+      statusTimer =
+        setInterval(
+
+          () => {
+
+            atualizarStatus(
+              ticket_id
+            );
+
+          },
+
+          10000
+
+        );
 
 
     }
