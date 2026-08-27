@@ -1,4 +1,3 @@
-```html
 <!DOCTYPE html>
 <html lang="pt-BR">
 
@@ -83,10 +82,25 @@ h1{
   padding:14px;
   background:#151515;
   margin-bottom:18px;
+  text-align:center;
+  color:var(--muted);
+  line-height:1.5;
 }
 
 .info strong{
   color:var(--gold);
+}
+
+.info-loading{
+  color:var(--muted);
+}
+
+.info-success{
+  color:#fff;
+}
+
+.info-error{
+  color:#ff9a9a;
 }
 
 label{
@@ -105,6 +119,11 @@ input{
   background:#111;
   color:#fff;
   font-size:15px;
+  outline:none;
+}
+
+input:focus{
+  border-color:var(--gold2);
 }
 
 button{
@@ -172,6 +191,8 @@ button:disabled{
       class="logo"
       src="logo.png"
       alt="Grupo CLIGED"
+      width="150"
+      height="150"
     >
 
   </div>
@@ -196,10 +217,10 @@ button:disabled{
 
 
     <div
-      class="info"
+      class="info info-loading"
       id="info"
     >
-      Carregando solicitação...
+      🔄 Carregando solicitação...
     </div>
 
 
@@ -320,16 +341,6 @@ const concluir =
 ==========================================================
 ID DO CHAMADO
 ==========================================================
-
-O link deverá futuramente receber:
-
-?id=ID_INTERNO_DO_TOMTICKET
-
-Exemplo:
-
-?id=641db2fa444862d1cdedcd21e50f2348
-
-==========================================================
 */
 
 const params =
@@ -339,16 +350,20 @@ const params =
 
 
 const ticketId =
-  params.get("id");
+  String(
+    params.get("id") || ""
+  ).trim();
 
 
 /*
 ==========================================================
-VALIDAÇÃO INICIAL
+MOSTRA ERRO
 ==========================================================
 */
 
-if(!ticketId){
+function mostrarErro(
+  mensagem
+){
 
   card.style.display =
     "none";
@@ -357,7 +372,183 @@ if(!ticketId){
     "block";
 
   errorMessage.textContent =
-    "O identificador da solicitação não foi informado.";
+    mensagem;
+
+}
+
+
+/*
+==========================================================
+CARREGA DADOS DA SOLICITAÇÃO
+==========================================================
+*/
+
+async function carregarSolicitacao(){
+
+  /*
+  --------------------------------------------------------
+  Validação do ID
+  --------------------------------------------------------
+  */
+
+  if(!ticketId){
+
+    mostrarErro(
+      "O identificador da solicitação não foi informado."
+    );
+
+    return;
+
+  }
+
+
+  /*
+  --------------------------------------------------------
+  Consulta o Worker
+  --------------------------------------------------------
+  */
+
+  try{
+
+    const response =
+      await fetch(
+
+        API +
+        "/status?id=" +
+        encodeURIComponent(
+          ticketId
+        ),
+
+        {
+          method:
+            "GET",
+
+          cache:
+            "no-store"
+        }
+
+      );
+
+
+    const result =
+      await response.json();
+
+
+    console.log(
+      "Dados da solicitação:",
+      result
+    );
+
+
+    /*
+    ------------------------------------------------------
+    Verifica resposta
+    ------------------------------------------------------
+    */
+
+    if(
+      !response.ok ||
+      !result.sucesso
+    ){
+
+      throw new Error(
+        result.mensagem ||
+        "Não foi possível carregar a solicitação."
+      );
+
+    }
+
+
+    /*
+    ------------------------------------------------------
+    Tenta encontrar os dados do chamado
+    ------------------------------------------------------
+    */
+
+    const dados =
+      result.data ||
+      {};
+
+
+    const subject =
+      result.subject ||
+      dados.subject ||
+      "";
+
+
+    /*
+    ------------------------------------------------------
+    Mostra apenas informações úteis.
+    
+    O ID interno NÃO é mostrado.
+    ------------------------------------------------------
+    */
+
+    if(subject){
+
+      let texto =
+        String(
+          subject
+        );
+
+
+      /*
+      Remove "Solicitação -" caso exista,
+      deixando a tela mais limpa.
+      */
+
+      texto =
+        texto.replace(
+          /^Solicitação\s*-\s*/i,
+          ""
+        );
+
+
+      info.innerHTML =
+        "<strong>Solicitação:</strong><br>" +
+        texto;
+
+    }
+    else{
+
+      info.innerHTML =
+        "<strong>Solicitação carregada.</strong><br>" +
+        "Confirme que o atendimento foi realizado.";
+
+    }
+
+
+    info.className =
+      "info info-success";
+
+
+  }
+  catch(err){
+
+    console.error(
+      "Erro ao carregar solicitação:",
+      err
+    );
+
+
+    /*
+    ------------------------------------------------------
+    Mesmo que a consulta informativa falhe,
+    NÃO bloqueamos a conclusão.
+
+    O ID já veio pelo link e o Worker valida
+    novamente no POST /concluir.
+    ------------------------------------------------------
+    */
+
+    info.innerHTML =
+      "⚠️ Não foi possível carregar os detalhes.<br>" +
+      "Você ainda pode registrar a conclusão.";
+
+    info.className =
+      "info info-error";
+
+  }
 
 }
 
@@ -420,7 +611,10 @@ concluir.addEventListener(
 
       const response =
         await fetch(
-          API + "/concluir",
+
+          API +
+          "/concluir",
+
           {
 
             method:
@@ -445,6 +639,7 @@ concluir.addEventListener(
               })
 
           }
+
         );
 
 
@@ -453,10 +648,16 @@ concluir.addEventListener(
 
 
       console.log(
-        "Resposta da API:",
+        "Resposta da conclusão:",
         result
       );
 
+
+      /*
+      ----------------------------------------------------
+      VERIFICA RESPOSTA
+      ----------------------------------------------------
+      */
 
       if(
         !response.ok ||
@@ -487,17 +688,20 @@ concluir.addEventListener(
 
       successMessage.innerHTML =
 
-        "Responsável: <strong>" +
+        "Atendimento realizado por:<br>" +
+
+        "<strong>" +
         nomeColaboradora +
         "</strong><br><br>" +
 
-        "O chamado foi atualizado com a conclusão.";
+        "A conclusão foi registrada com sucesso.";
+
 
     }
     catch(err){
 
       console.error(
-        "Erro:",
+        "Erro ao concluir:",
         err
       );
 
@@ -519,8 +723,17 @@ concluir.addEventListener(
   }
 );
 
+
+/*
+==========================================================
+INICIALIZAÇÃO
+==========================================================
+*/
+
+carregarSolicitacao();
+
 </script>
 
 </body>
+
 </html>
-```
