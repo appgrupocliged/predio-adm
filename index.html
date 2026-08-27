@@ -197,7 +197,7 @@ button:disabled{
 }
 
 .status-value{
-  font-size:14px;
+  font-size:15px;
   line-height:1.5;
   color:#fff;
   word-break:break-word;
@@ -530,7 +530,7 @@ button:disabled{
 
 /*
 ==========================================================
-MAPA ÚNICO DOS QR CODES
+MAPA OFICIAL DOS QR CODES
 ==========================================================
 */
 
@@ -782,59 +782,7 @@ boxes.forEach(
 
 /*
 ==========================================================
-VERIFICA SE O STATUS É DE CONCLUSÃO
-==========================================================
-*/
-
-function statusFoiConcluido(
-  status
-){
-
-  if(!status){
-
-    return false;
-
-  }
-
-
-  const normalizado =
-    String(
-      status
-    )
-    .trim()
-    .toUpperCase();
-
-
-  return (
-
-    normalizado.includes(
-      "CLOSED"
-    ) ||
-
-    normalizado.includes(
-      "FINISHED"
-    ) ||
-
-    normalizado.includes(
-      "CONCLU"
-    ) ||
-
-    normalizado.includes(
-      "FINALIZ"
-    ) ||
-
-    normalizado.includes(
-      "RESOLV"
-    )
-
-  );
-
-}
-
-
-/*
-==========================================================
-FORMATA STATUS
+FORMATA STATUS PARA O SOLICITANTE
 ==========================================================
 */
 
@@ -845,10 +793,10 @@ function mostrarStatus(
   if(!status){
 
     statusValue.textContent =
-      "⚪ Status não disponível.";
+      "🔵 Em andamento";
 
     statusValue.className =
-      "status-value status-warning";
+      "status-value";
 
     return;
 
@@ -867,18 +815,30 @@ function mostrarStatus(
 
   /*
   ========================================================
-  STATUS DE CONCLUSÃO
+  STATUS FINALIZADO
   ========================================================
   */
 
   if(
-    statusFoiConcluido(
-      valor
+    normalizado.includes(
+      "FINISHED"
+    ) ||
+    normalizado.includes(
+      "CLOSED"
+    ) ||
+    normalizado.includes(
+      "CONCLU"
+    ) ||
+    normalizado.includes(
+      "FINALIZ"
+    ) ||
+    normalizado.includes(
+      "RESOLV"
     )
   ){
 
     statusValue.textContent =
-      "🟢 SOLICITAÇÃO CONCLUÍDA";
+      "🟢 Solicitação concluída";
 
     statusValue.className =
       "status-value status-success";
@@ -890,7 +850,7 @@ function mostrarStatus(
 
   /*
   ========================================================
-  STATUS AGUARDANDO CLIENTE
+  STATUS DE ATENDIMENTO / RESPOSTA
   ========================================================
   */
 
@@ -903,12 +863,14 @@ function mostrarStatus(
     ) ||
     normalizado.includes(
       "RESPONDED"
+    ) ||
+    normalizado.includes(
+      "ANSWERED"
     )
   ){
 
     statusValue.textContent =
-      "🟡 " +
-      valor;
+      "🟡 Em atendimento";
 
     statusValue.className =
       "status-value status-warning";
@@ -920,13 +882,12 @@ function mostrarStatus(
 
   /*
   ========================================================
-  STATUS NORMAL
+  OUTROS STATUS
   ========================================================
   */
 
   statusValue.textContent =
-    "🔵 " +
-    valor;
+    "🔵 Em andamento";
 
   statusValue.className =
     "status-value";
@@ -937,12 +898,6 @@ function mostrarStatus(
 /*
 ==========================================================
 CONSULTA STATUS
-==========================================================
-
-O Worker disponibiliza:
-
-GET /status?id=ID_DO_CHAMADO
-
 ==========================================================
 */
 
@@ -1002,7 +957,7 @@ async function consultarStatus(){
 
     /*
     ======================================================
-    PEGA O STATUS
+    PEGA O STATUS RETORNADO PELO WORKER
     ======================================================
     */
 
@@ -1014,12 +969,6 @@ async function consultarStatus(){
       result.data?.status_name ||
       result.data?.statusName;
 
-
-    /*
-    ======================================================
-    MOSTRA STATUS
-    ======================================================
-    */
 
     mostrarStatus(
       status
@@ -1036,29 +985,40 @@ async function consultarStatus(){
 
     /*
     ======================================================
-    SE ESTIVER CONCLUÍDO, PARA A CONSULTA
+    SE FINALIZADO, PARA A CONSULTA
     ======================================================
     */
 
     if(
-      statusFoiConcluido(
-        status
+      status &&
+      (
+        String(status)
+          .toUpperCase()
+          .includes("FINISHED") ||
+
+        String(status)
+          .toUpperCase()
+          .includes("CLOSED") ||
+
+        String(status)
+          .toUpperCase()
+          .includes("CONCLU") ||
+
+        String(status)
+          .toUpperCase()
+          .includes("FINALIZ") ||
+
+        String(status)
+          .toUpperCase()
+          .includes("RESOLV")
       )
     ){
-
-      console.log(
-        "Chamado concluído. Monitoramento encerrado."
-      );
-
 
       if(statusInterval){
 
         clearInterval(
           statusInterval
         );
-
-        statusInterval =
-          null;
 
       }
 
@@ -1073,11 +1033,17 @@ async function consultarStatus(){
     );
 
 
+    /*
+    ======================================================
+    NÃO MOSTRA ERRO TÉCNICO PARA O SOLICITANTE
+    ======================================================
+    */
+
     statusValue.textContent =
-      "⚠️ Não foi possível atualizar o status agora.";
+      "🔵 Em andamento";
 
     statusValue.className =
-      "status-value status-error";
+      "status-value";
 
   }
 
@@ -1100,7 +1066,7 @@ function iniciarAtualizacaoStatus(){
 
 
   /*
-  Depois consulta a cada 10 segundos.
+  Consulta a cada 10 segundos.
   */
 
   statusInterval =
@@ -1282,7 +1248,11 @@ btn.addEventListener(
 
       /*
       ======================================================
-      RESUMO
+      RESUMO PARA O SOLICITANTE
+      ======================================================
+      
+      O número do chamado NÃO é mais mostrado.
+      
       ======================================================
       */
 
@@ -1306,16 +1276,7 @@ btn.addEventListener(
         new Date()
           .toLocaleString(
             "pt-BR"
-          ) +
-
-        "<br><br>" +
-
-        "<strong>Chamado:</strong> #" +
-
-        (
-          ticketId ||
-          "não informado"
-        );
+          );
 
 
       form.style.display =
@@ -1333,7 +1294,7 @@ btn.addEventListener(
       */
 
       statusValue.textContent =
-        "🟡 SOLICITAÇÃO REGISTRADA — CONSULTANDO STATUS...";
+        "🔄 Consultando status...";
 
       statusValue.className =
         "status-value status-loading";
@@ -1353,10 +1314,10 @@ btn.addEventListener(
       else{
 
         statusValue.textContent =
-          "⚠️ Chamado criado, mas o ID não foi retornado para consulta.";
+          "🔵 Em andamento";
 
         statusValue.className =
-          "status-value status-error";
+          "status-value";
 
       }
 
