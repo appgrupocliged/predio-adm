@@ -516,12 +516,6 @@ button:disabled{
 
 <script>
 
-/*
-==========================================================
-MAPA ÚNICO DOS QR CODES
-==========================================================
-*/
-
 const LOCAIS = {
 
   "B.01": "DIRETORIA",
@@ -547,21 +541,9 @@ const LOCAIS = {
 };
 
 
-/*
-==========================================================
-URL DA API
-==========================================================
-*/
-
 const API_URL =
   "https://predio-adm-api.appgrupocliged.workers.dev";
 
-
-/*
-==========================================================
-ELEMENTOS
-==========================================================
-*/
 
 const localEl =
   document.getElementById("local");
@@ -596,24 +578,12 @@ const statusDate =
   document.getElementById("statusDate");
 
 
-/*
-==========================================================
-VARIÁVEIS DO CHAMADO
-==========================================================
-*/
-
 let ticketId =
   null;
 
 let statusInterval =
   null;
 
-
-/*
-==========================================================
-NOVA SOLICITAÇÃO
-==========================================================
-*/
 
 newRequest.addEventListener(
   "click",
@@ -632,12 +602,6 @@ newRequest.addEventListener(
   }
 );
 
-
-/*
-==========================================================
-IDENTIFICAÇÃO DO QR CODE
-==========================================================
-*/
 
 function identificarLocalPorQRCode(){
 
@@ -710,12 +674,6 @@ function identificarLocalPorQRCode(){
 }
 
 
-/*
-==========================================================
-ATUALIZAÇÃO DO FORMULÁRIO
-==========================================================
-*/
-
 function update(){
 
   const selected =
@@ -744,12 +702,6 @@ function update(){
 }
 
 
-/*
-==========================================================
-EVENTOS
-==========================================================
-*/
-
 localEl.addEventListener(
   "change",
   update
@@ -767,12 +719,6 @@ boxes.forEach(
   }
 );
 
-
-/*
-==========================================================
-FORMATA STATUS
-==========================================================
-*/
 
 function mostrarStatus(
   status
@@ -800,12 +746,6 @@ function mostrarStatus(
   const normalizado =
     valor.toUpperCase();
 
-
-  /*
-  ========================================================
-  CHAMADO FINALIZADO
-  ========================================================
-  */
 
   if(
     normalizado.includes(
@@ -836,12 +776,6 @@ function mostrarStatus(
   }
 
 
-  /*
-  ========================================================
-  QUALQUER STATUS NÃO FINALIZADO
-  ========================================================
-  */
-
   statusValue.textContent =
     "🟡 Enviada";
 
@@ -850,12 +784,6 @@ function mostrarStatus(
 
 }
 
-
-/*
-==========================================================
-CONSULTA STATUS
-==========================================================
-*/
 
 async function consultarStatus(){
 
@@ -933,12 +861,6 @@ async function consultarStatus(){
         );
 
 
-    /*
-    ========================================================
-    SE ESTIVER CONCLUÍDO, PARA A CONSULTA
-    ========================================================
-    */
-
     if(
       status &&
       (
@@ -994,12 +916,6 @@ async function consultarStatus(){
 }
 
 
-/*
-==========================================================
-INICIA ATUALIZAÇÃO DO STATUS
-==========================================================
-*/
-
 function iniciarAtualizacaoStatus(){
 
   consultarStatus();
@@ -1014,15 +930,10 @@ function iniciarAtualizacaoStatus(){
 }
 
 
-/*
-==========================================================
-ENVIO
-==========================================================
-*/
-
 btn.addEventListener(
   "click",
   async () => {
+
 
     const local_code =
       localEl.value;
@@ -1077,12 +988,6 @@ btn.addEventListener(
     btn.textContent =
       "ENVIANDO...";
 
-
-    /*
-    ======================================================
-    PAYLOAD
-    ======================================================
-    */
 
     const payload = {
 
@@ -1167,17 +1072,6 @@ btn.addEventListener(
       }
 
 
-      /*
-      ====================================================
-      ID INTERNO
-      ====================================================
-
-      Continua sendo usado somente
-      para consulta do status.
-
-      NÃO aparece para o solicitante.
-      */
-
       ticketId =
         result.ticket_id ||
         result.id ||
@@ -1190,12 +1084,6 @@ btn.addEventListener(
         ticketId
       );
 
-
-      /*
-      ====================================================
-      RESUMO DA SOLICITAÇÃO
-      ====================================================
-      */
 
       summary.innerHTML =
 
@@ -1220,12 +1108,6 @@ btn.addEventListener(
           );
 
 
-      /*
-      ====================================================
-      MOSTRA TELA DE SUCESSO
-      ====================================================
-      */
-
       form.style.display =
         "none";
 
@@ -1234,24 +1116,12 @@ btn.addEventListener(
         "block";
 
 
-      /*
-      ====================================================
-      STATUS INICIAL
-      ====================================================
-      */
-
       statusValue.textContent =
         "🟡 Enviada";
 
       statusValue.className =
         "status-value status-warning";
 
-
-      /*
-      ====================================================
-      MONITORAMENTO
-      ====================================================
-      */
 
       if(ticketId){
 
@@ -1262,6 +1132,7 @@ btn.addEventListener(
 
     }
     catch(error){
+
 
       console.error(
         "Erro ao enviar solicitação:",
@@ -1286,12 +1157,6 @@ btn.addEventListener(
   }
 );
 
-
-/*
-==========================================================
-INICIALIZAÇÃO
-==========================================================
-*/
 
 identificarLocalPorQRCode();
 
