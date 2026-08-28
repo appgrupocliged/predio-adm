@@ -253,10 +253,6 @@ button:disabled{
   </div>
 
 
-  <!-- =====================================================
-       FORMULÁRIO
-       ===================================================== -->
-
   <div class="card" id="form">
 
     <h1>
@@ -468,10 +464,6 @@ button:disabled{
   </div>
 
 
-  <!-- =====================================================
-       SUCESSO
-       ===================================================== -->
-
   <div
     class="card success"
     id="success"
@@ -487,10 +479,6 @@ button:disabled{
 
     <p id="summary"></p>
 
-
-    <!-- ===================================================
-         STATUS
-         =================================================== -->
 
     <div class="status-box">
 
@@ -793,7 +781,7 @@ function mostrarStatus(
   if(!status){
 
     statusValue.textContent =
-      "⚪ Status não disponível.";
+      "🟡 Enviada";
 
     statusValue.className =
       "status-value status-warning";
@@ -814,15 +802,17 @@ function mostrarStatus(
 
 
   /*
-  STATUS DE CONCLUSÃO
+  ========================================================
+  CHAMADO FINALIZADO
+  ========================================================
   */
 
   if(
     normalizado.includes(
-      "CLOSED"
+      "FINISHED"
     ) ||
     normalizado.includes(
-      "FINISHED"
+      "CLOSED"
     ) ||
     normalizado.includes(
       "CONCLU"
@@ -836,7 +826,7 @@ function mostrarStatus(
   ){
 
     statusValue.textContent =
-      "🟢 SOLICITAÇÃO CONCLUÍDA";
+      "🟢 Solicitação concluída";
 
     statusValue.className =
       "status-value status-success";
@@ -847,34 +837,9 @@ function mostrarStatus(
 
 
   /*
-  STATUS AGUARDANDO CLIENTE
-  */
-
-  if(
-    normalizado.includes(
-      "AWAITING"
-    ) ||
-    normalizado.includes(
-      "CUSTOMER"
-    ) ||
-    normalizado.includes(
-      "RESPONDED"
-    )
-  ){
-
-    statusValue.textContent =
-      "🟡 Enviada";
-
-    statusValue.className =
-      "status-value status-warning";
-
-    return;
-
-  }
-
-
-  /*
-  STATUS NORMAL
+  ========================================================
+  QUALQUER STATUS NÃO FINALIZADO
+  ========================================================
   */
 
   statusValue.textContent =
@@ -968,16 +933,22 @@ async function consultarStatus(){
         );
 
 
+    /*
+    ========================================================
+    SE ESTIVER CONCLUÍDO, PARA A CONSULTA
+    ========================================================
+    */
+
     if(
       status &&
       (
         String(status)
           .toUpperCase()
-          .includes("CLOSED") ||
+          .includes("FINISHED") ||
 
         String(status)
           .toUpperCase()
-          .includes("FINISHED") ||
+          .includes("CLOSED") ||
 
         String(status)
           .toUpperCase()
@@ -1013,10 +984,10 @@ async function consultarStatus(){
 
 
     statusValue.textContent =
-      "⚠️ Não foi possível atualizar o status agora.";
+      "🟡 Enviada";
 
     statusValue.className =
-      "status-value status-error";
+      "status-value status-warning";
 
   }
 
@@ -1052,7 +1023,6 @@ ENVIO
 btn.addEventListener(
   "click",
   async () => {
-
 
     const local_code =
       localEl.value;
@@ -1108,6 +1078,12 @@ btn.addEventListener(
       "ENVIANDO...";
 
 
+    /*
+    ======================================================
+    PAYLOAD
+    ======================================================
+    */
+
     const payload = {
 
       local_code:
@@ -1118,22 +1094,12 @@ btn.addEventListener(
 
       subject:
         "Solicitação - " +
-        local_code +
-        " - " +
         nomeLocal,
 
       message:
-        "Código do local: " +
-        local_code +
-
-        "\n\n" +
-
         "Local: " +
         nomeLocal +
-
-        "\n\n" +
-
-        "Solicitação:\n- " +
+        "\n\nSolicitação:\n- " +
         selected.join("\n- "),
 
       priority:
@@ -1149,7 +1115,6 @@ btn.addEventListener(
 
 
     try {
-
 
       const response =
         await fetch(
@@ -1203,9 +1168,14 @@ btn.addEventListener(
 
 
       /*
-      ======================================================
-      PEGA O ID DO CHAMADO
-      ======================================================
+      ====================================================
+      ID INTERNO
+      ====================================================
+
+      Continua sendo usado somente
+      para consulta do status.
+
+      NÃO aparece para o solicitante.
       */
 
       ticketId =
@@ -1222,19 +1192,16 @@ btn.addEventListener(
 
 
       /*
-      ======================================================
-      RESUMO
-      ======================================================
+      ====================================================
+      RESUMO DA SOLICITAÇÃO
+      ====================================================
       */
 
       summary.innerHTML =
 
-        "<strong>Código do local:</strong> " +
-        local_code +
-
-        "<br><br>" +
-
         "<strong>Local:</strong> " +
+        local_code +
+        " - " +
         nomeLocal +
 
         "<br><br>" +
@@ -1253,6 +1220,12 @@ btn.addEventListener(
           );
 
 
+      /*
+      ====================================================
+      MOSTRA TELA DE SUCESSO
+      ====================================================
+      */
+
       form.style.display =
         "none";
 
@@ -1262,22 +1235,22 @@ btn.addEventListener(
 
 
       /*
-      ======================================================
+      ====================================================
       STATUS INICIAL
-      ======================================================
+      ====================================================
       */
 
       statusValue.textContent =
         "🟡 Enviada";
 
       statusValue.className =
-        "status-value status-loading";
+        "status-value status-warning";
 
 
       /*
-      ======================================================
-      COMEÇA MONITORAMENTO
-      ======================================================
+      ====================================================
+      MONITORAMENTO
+      ====================================================
       */
 
       if(ticketId){
@@ -1285,20 +1258,10 @@ btn.addEventListener(
         iniciarAtualizacaoStatus();
 
       }
-      else{
-
-        statusValue.textContent =
-          "⚠️ Chamado criado, mas o ID não foi retornado para consulta.";
-
-        statusValue.className =
-          "status-value status-error";
-
-      }
 
 
     }
     catch(error){
-
 
       console.error(
         "Erro ao enviar solicitação:",
@@ -1314,7 +1277,6 @@ btn.addEventListener(
 
       btn.disabled =
         false;
-
 
       btn.textContent =
         "ENVIAR SOLICITAÇÃO";
