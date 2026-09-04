@@ -347,14 +347,14 @@ const params =
   new URLSearchParams(
     window.location.search
   );
-
-
 const ticketId =
   String(
     params.get("id") || ""
   ).trim();
-
-
+const localCode =
+  String(
+    params.get("local") || ""
+  ).trim();
 /*
 ==========================================================
 MOSTRA ERRO
@@ -628,15 +628,18 @@ concluir.addEventListener(
             },
 
             body:
-              JSON.stringify({
+  JSON.stringify({
 
-                ticket_id:
-                  ticketId,
+    ticket_id:
+      ticketId,
 
-                nome:
-                  nomeColaboradora
+    nome:
+      nomeColaboradora,
 
-              })
+    local_code:
+      localCode
+
+  })
 
           }
 
