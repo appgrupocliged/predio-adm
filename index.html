@@ -699,6 +699,168 @@ let statusInterval =
   null;
 
 
+// ============================================================
+// ALERTA NO CELULAR QUANDO A SOLICITAÇÃO FOR CONCLUÍDA
+// Notificação do navegador + vibração + som. Funciona enquanto
+// a aba está aberta (mesmo minimizada). Não funciona com o
+// navegador totalmente fechado - isso exigiria push (PWA).
+// ============================================================
+
+function pedirPermissaoNotificacao(){
+
+  try {
+
+    if(
+      "Notification" in window &&
+      Notification.permission === "default"
+    ){
+
+      Notification.requestPermission();
+
+    }
+
+  }
+  catch(error){
+
+    console.error(
+      "Não foi possível pedir permissão de notificação:",
+      error
+    );
+
+  }
+
+}
+
+
+function tocarSom(){
+
+  try {
+
+    const AudioContextRef =
+      window.AudioContext ||
+      window.webkitAudioContext;
+
+    if(!AudioContextRef){
+
+      return;
+
+    }
+
+    const ctx =
+      new AudioContextRef();
+
+    const osc =
+      ctx.createOscillator();
+
+    const gain =
+      ctx.createGain();
+
+    osc.connect(gain);
+
+    gain.connect(
+      ctx.destination
+    );
+
+    osc.type =
+      "sine";
+
+    osc.frequency.setValueAtTime(
+      880,
+      ctx.currentTime
+    );
+
+    gain.gain.setValueAtTime(
+      0.18,
+      ctx.currentTime
+    );
+
+    gain.gain.exponentialRampToValueAtTime(
+      0.001,
+      ctx.currentTime + 0.5
+    );
+
+    osc.start();
+
+    osc.stop(
+      ctx.currentTime + 0.5
+    );
+
+  }
+  catch(error){
+
+    console.error(
+      "Não foi possível tocar o som:",
+      error
+    );
+
+  }
+
+}
+
+
+function notificarConclusao(
+  dados
+){
+
+  try {
+
+    if(
+      "Notification" in window &&
+      Notification.permission === "granted"
+    ){
+
+      new Notification(
+        "Solicitação concluída ✅",
+        {
+          body:
+            dados && dados.nomeLocal ?
+              "Local: " + dados.nomeLocal :
+              "Sua solicitação foi finalizada.",
+
+          icon:
+            "logo.png"
+        }
+      );
+
+    }
+
+  }
+  catch(error){
+
+    console.error(
+      "Não foi possível exibir a notificação:",
+      error
+    );
+
+  }
+
+
+  try {
+
+    if("vibrate" in navigator){
+
+      navigator.vibrate(
+        [200, 100, 200]
+      );
+
+    }
+
+  }
+  catch(error){
+
+    console.error(
+      "Não foi possível vibrar:",
+      error
+    );
+
+  }
+
+
+  tocarSom();
+
+}
+
+
 // Só esta ação (clique explícito) apaga o cache e volta para
 // o formulário de nova solicitação.
 newRequest.addEventListener(
@@ -1094,6 +1256,43 @@ async function consultarStatus(){
 
       }
 
+
+      // Dispara o alerta (notificação/vibração/som) só na
+      // primeira vez que detectamos a conclusão. Marca no
+      // cache como "notificado" para não repetir o alerta
+      // caso a pessoa reabra a aba depois.
+
+      if(localEl.value){
+
+        const dadosSalvos =
+          lerSolicitacaoLocal(
+            localEl.value
+          );
+
+
+        if(
+          dadosSalvos &&
+          !dadosSalvos.notificado
+        ){
+
+          notificarConclusao(
+            dadosSalvos
+          );
+
+
+          dadosSalvos.notificado =
+            true;
+
+
+          salvarSolicitacaoLocal(
+            localEl.value,
+            dadosSalvos
+          );
+
+        }
+
+      }
+
     }
 
   }
@@ -1196,6 +1395,9 @@ btn.addEventListener(
 
     btn.textContent =
       "ENVIANDO...";
+
+
+    pedirPermissaoNotificacao();
 
 
     const payload = {
@@ -1400,6 +1602,8 @@ btn.addEventListener(
 identificarLocalPorQRCode();
 
 update();
+
+pedirPermissaoNotificacao();
 
 </script>
 
