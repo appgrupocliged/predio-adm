@@ -550,6 +550,11 @@ const API_URL =
 // Evita perder a tela de "Solicitado" ao minimizar/reabrir o
 // navegador. Uma chave por local, já que o mesmo celular pode
 // escanear QR Codes de locais diferentes.
+//
+// REGRA IMPORTANTE: o cache só é apagado por ação explícita da
+// pessoa (botão "Nova solicitação"). O status finalizado deve
+// continuar sendo exibido normalmente até que isso aconteça -
+// ele NUNCA é apagado sozinho automaticamente ao concluir.
 // ============================================================
 
 const STORAGE_PREFIX =
@@ -694,6 +699,8 @@ let statusInterval =
   null;
 
 
+// Só esta ação (clique explícito) apaga o cache e volta para
+// o formulário de nova solicitação.
 newRequest.addEventListener(
   "click",
   () => {
@@ -836,9 +843,10 @@ function identificarLocalPorQRCode(){
     "block";
 
 
-  // Se já existe uma solicitação em aberto salva para esse
-  // local, restaura direto a tela de "Solicitado" em vez do
-  // formulário - evita perder o status ao minimizar/reabrir.
+  // Se já existe uma solicitação salva para esse local (em
+  // aberto OU já finalizada, pois o cache só é apagado pelo
+  // botão "Nova solicitação"), restaura direto a tela de
+  // status em vez do formulário.
 
   const solicitacaoSalva =
     lerSolicitacaoLocal(
@@ -916,50 +924,55 @@ boxes.forEach(
 );
 
 
-function mostrarStatus(
+function statusEhFinal(
   status
 ){
 
   if(!status){
 
-    statusValue.textContent =
-      "🟡 Enviada";
-
-    statusValue.className =
-      "status-value status-warning";
-
-    return;
+    return false;
 
   }
 
 
-  const valor =
-    String(
-      status
-    ).trim();
-
-
   const normalizado =
-    valor.toUpperCase();
+    String(status)
+      .trim()
+      .toUpperCase();
 
 
-  if(
+  return (
+
     normalizado.includes(
       "FINISHED"
     ) ||
+
     normalizado.includes(
       "CLOSED"
     ) ||
+
     normalizado.includes(
       "CONCLU"
     ) ||
+
     normalizado.includes(
       "FINALIZ"
     ) ||
+
     normalizado.includes(
       "RESOLV"
     )
-  ){
+
+  );
+
+}
+
+
+function mostrarStatus(
+  status
+){
+
+  if(statusEhFinal(status)){
 
     statusValue.textContent =
       "🟢 Solicitação concluída";
@@ -1059,29 +1072,16 @@ async function consultarStatus(){
 
 
     if(
-      status &&
-      (
-        String(status)
-          .toUpperCase()
-          .includes("FINISHED") ||
-
-        String(status)
-          .toUpperCase()
-          .includes("CLOSED") ||
-
-        String(status)
-          .toUpperCase()
-          .includes("CONCLU") ||
-
-        String(status)
-          .toUpperCase()
-          .includes("FINALIZ") ||
-
-        String(status)
-          .toUpperCase()
-          .includes("RESOLV")
+      statusEhFinal(
+        status
       )
     ){
+
+      // Chamado finalizado - apenas para de ficar consultando
+      // repetidamente. O cache NÃO é apagado aqui: a tela deve
+      // continuar mostrando "Solicitação concluída" até a
+      // pessoa clicar em "Nova solicitação" (ou ler um novo
+      // QR Code, o que leva à mesma tela com esse botão).
 
       if(statusInterval){
 
@@ -1089,18 +1089,8 @@ async function consultarStatus(){
           statusInterval
         );
 
-      }
-
-
-      // Chamado finalizado - limpa a solicitação salva para
-      // esse local, assim uma próxima visita já mostra o
-      // formulário de nova solicitação normalmente.
-
-      if(localEl.value){
-
-        limparSolicitacaoLocal(
-          localEl.value
-        );
+        statusInterval =
+          null;
 
       }
 
@@ -1129,6 +1119,15 @@ async function consultarStatus(){
 function iniciarAtualizacaoStatus(){
 
   consultarStatus();
+
+
+  if(statusInterval){
+
+    clearInterval(
+      statusInterval
+    );
+
+  }
 
 
   statusInterval =
@@ -1300,7 +1299,8 @@ btn.addEventListener(
 
 
       // Salva a solicitação localmente, para sobreviver a
-      // minimizar/reabrir o navegador antes da conclusão.
+      // minimizar/reabrir o navegador antes E depois da
+      // conclusão do chamado.
 
       salvarSolicitacaoLocal(
         local_code,
