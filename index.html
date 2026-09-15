@@ -545,6 +545,115 @@ const API_URL =
   "https://predio-adm-api.appgrupocliged.workers.dev";
 
 
+// ============================================================
+// PERSISTÊNCIA DA SOLICITAÇÃO EM ABERTO (localStorage)
+// Evita perder a tela de "Solicitado" ao minimizar/reabrir o
+// navegador. Uma chave por local, já que o mesmo celular pode
+// escanear QR Codes de locais diferentes.
+// ============================================================
+
+const STORAGE_PREFIX =
+  "solicitacao_";
+
+
+function chaveStorage(
+  local_code
+){
+
+  return (
+    STORAGE_PREFIX +
+    local_code
+  );
+
+}
+
+
+function salvarSolicitacaoLocal(
+  local_code,
+  dados
+){
+
+  try {
+
+    localStorage.setItem(
+      chaveStorage(
+        local_code
+      ),
+      JSON.stringify(
+        dados
+      )
+    );
+
+  }
+  catch(error){
+
+    console.error(
+      "Não foi possível salvar a solicitação localmente:",
+      error
+    );
+
+  }
+
+}
+
+
+function lerSolicitacaoLocal(
+  local_code
+){
+
+  try {
+
+    const bruto =
+      localStorage.getItem(
+        chaveStorage(
+          local_code
+        )
+      );
+
+    return bruto ?
+      JSON.parse(bruto) :
+      null;
+
+  }
+  catch(error){
+
+    console.error(
+      "Não foi possível ler a solicitação salva:",
+      error
+    );
+
+    return null;
+
+  }
+
+}
+
+
+function limparSolicitacaoLocal(
+  local_code
+){
+
+  try {
+
+    localStorage.removeItem(
+      chaveStorage(
+        local_code
+      )
+    );
+
+  }
+  catch(error){
+
+    console.error(
+      "Não foi possível limpar a solicitação salva:",
+      error
+    );
+
+  }
+
+}
+
+
 const localEl =
   document.getElementById("local");
 
@@ -597,10 +706,68 @@ newRequest.addEventListener(
 
     }
 
+    const codigoAtual =
+      localEl.value;
+
+    if(codigoAtual){
+
+      limparSolicitacaoLocal(
+        codigoAtual
+      );
+
+    }
+
     location.reload();
 
   }
 );
+
+
+function restaurarTelaSucesso(
+  dados
+){
+
+  summary.innerHTML =
+
+    "<strong>Local:</strong> " +
+    dados.local_code +
+    " - " +
+    dados.nomeLocal +
+
+    "<br><br>" +
+
+    "<strong>Solicitação:</strong><br>" +
+
+    dados.selected.join("<br>") +
+
+    "<br><br>" +
+
+    "<strong>Data:</strong> " +
+
+    new Date(
+      dados.criado_em
+    ).toLocaleString(
+      "pt-BR"
+    );
+
+
+  form.style.display =
+    "none";
+
+  success.style.display =
+    "block";
+
+
+  statusValue.textContent =
+    "🔄 Consultando status...";
+
+  statusValue.className =
+    "status-value status-loading";
+
+
+  iniciarAtualizacaoStatus();
+
+}
 
 
 function identificarLocalPorQRCode(){
@@ -667,6 +834,35 @@ function identificarLocalPorQRCode(){
 
   localCode.style.display =
     "block";
+
+
+  // Se já existe uma solicitação em aberto salva para esse
+  // local, restaura direto a tela de "Solicitado" em vez do
+  // formulário - evita perder o status ao minimizar/reabrir.
+
+  const solicitacaoSalva =
+    lerSolicitacaoLocal(
+      codigoNormalizado
+    );
+
+
+  if(
+    solicitacaoSalva &&
+    solicitacaoSalva.ticket_id
+  ){
+
+    ticketId =
+      solicitacaoSalva.ticket_id;
+
+
+    restaurarTelaSucesso(
+      solicitacaoSalva
+    );
+
+
+    return;
+
+  }
 
 
   update();
@@ -782,6 +978,7 @@ function mostrarStatus(
   statusValue.className =
     "status-value status-warning";
 
+
 }
 
 
@@ -890,6 +1087,19 @@ async function consultarStatus(){
 
         clearInterval(
           statusInterval
+        );
+
+      }
+
+
+      // Chamado finalizado - limpa a solicitação salva para
+      // esse local, assim uma próxima visita já mostra o
+      // formulário de nova solicitação normalmente.
+
+      if(localEl.value){
+
+        limparSolicitacaoLocal(
+          localEl.value
         );
 
       }
@@ -1085,6 +1295,34 @@ btn.addEventListener(
       );
 
 
+      const criadoEm =
+        new Date().toISOString();
+
+
+      // Salva a solicitação localmente, para sobreviver a
+      // minimizar/reabrir o navegador antes da conclusão.
+
+      salvarSolicitacaoLocal(
+        local_code,
+        {
+          ticket_id:
+            ticketId,
+
+          local_code:
+            local_code,
+
+          nomeLocal:
+            nomeLocal,
+
+          selected:
+            selected,
+
+          criado_em:
+            criadoEm
+        }
+      );
+
+
       summary.innerHTML =
 
         "<strong>Local:</strong> " +
@@ -1102,10 +1340,11 @@ btn.addEventListener(
 
         "<strong>Data:</strong> " +
 
-        new Date()
-          .toLocaleString(
-            "pt-BR"
-          );
+        new Date(
+          criadoEm
+        ).toLocaleString(
+          "pt-BR"
+        );
 
 
       form.style.display =
