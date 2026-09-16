@@ -545,6 +545,12 @@ const API_URL =
   "https://predio-adm-api.appgrupocliged.workers.dev";
 
 
+// Chave pública VAPID - identifica o remetente das notificações push.
+// A chave privada correspondente fica só no worker (secret).
+const VAPID_PUBLIC_KEY =
+  "BGAlUJ8Em1383y6fia0yoUigAM7WLKwLZ4_7mS1fhVZMmb6khjptEG6EDxH89trpvwHG7u1yexhGSJWzbvwpvqw";
+
+
 // ============================================================
 // PERSISTÊNCIA DA SOLICITAÇÃO EM ABERTO (localStorage)
 // Evita perder a tela de "Solicitado" ao minimizar/reabrir o
@@ -700,11 +706,45 @@ let statusInterval =
 
 
 // ============================================================
-// ALERTA NO CELULAR QUANDO A SOLICITAÇÃO FOR CONCLUÍDA
-// Notificação do navegador + vibração + som. Funciona enquanto
-// a aba está aberta (mesmo minimizada). Não funciona com o
-// navegador totalmente fechado - isso exigiria push (PWA).
+// NOTIFICAÇÃO PUSH REAL (Service Worker + Web Push)
+// Funciona mesmo com a tela do celular bloqueada, diferente do
+// alerta antigo baseado só em JS de página (que morre quando o
+// navegador congela a aba em segundo plano).
 // ============================================================
+
+function urlBase64ToUint8Array(
+  base64String
+){
+
+  const padding =
+    "=".repeat(
+      (4 - base64String.length % 4) % 4
+    );
+
+  const base64 =
+    (base64String + padding)
+      .replace(/-/g, "+")
+      .replace(/_/g, "/");
+
+  const rawData =
+    atob(base64);
+
+  const outputArray =
+    new Uint8Array(
+      rawData.length
+    );
+
+  for(let i = 0; i < rawData.length; ++i){
+
+    outputArray[i] =
+      rawData.charCodeAt(i);
+
+  }
+
+  return outputArray;
+
+}
+
 
 function pedirPermissaoNotificacao(){
 
@@ -732,131 +772,143 @@ function pedirPermissaoNotificacao(){
 }
 
 
-function tocarSom(){
+async function registrarServiceWorker(){
+
+  if(!("serviceWorker" in navigator)){
+
+    return null;
+
+  }
 
   try {
 
-    const AudioContextRef =
-      window.AudioContext ||
-      window.webkitAudioContext;
-
-    if(!AudioContextRef){
-
-      return;
-
-    }
-
-    const ctx =
-      new AudioContextRef();
-
-    const osc =
-      ctx.createOscillator();
-
-    const gain =
-      ctx.createGain();
-
-    osc.connect(gain);
-
-    gain.connect(
-      ctx.destination
-    );
-
-    osc.type =
-      "sine";
-
-    osc.frequency.setValueAtTime(
-      880,
-      ctx.currentTime
-    );
-
-    gain.gain.setValueAtTime(
-      0.18,
-      ctx.currentTime
-    );
-
-    gain.gain.exponentialRampToValueAtTime(
-      0.001,
-      ctx.currentTime + 0.5
-    );
-
-    osc.start();
-
-    osc.stop(
-      ctx.currentTime + 0.5
+    return await navigator.serviceWorker.register(
+      "sw.js"
     );
 
   }
   catch(error){
 
     console.error(
-      "Não foi possível tocar o som:",
+      "Não foi possível registrar o service worker:",
       error
     );
+
+    return null;
 
   }
 
 }
 
 
-function notificarConclusao(
-  dados
+// Registra o service worker assim que a página carrega, sem
+// depender de permissão - o registro em si não pede nada à
+// pessoa, só a inscrição (subscribe) depois é que exige.
+const registroServiceWorkerPromise =
+  registrarServiceWorker();
+
+
+async function inscreverPush(
+  ticketIdAtual
 ){
 
+  if(
+    !("serviceWorker" in navigator) ||
+    !("PushManager" in window)
+  ){
+
+    return;
+
+  }
+
+  if(
+    !("Notification" in window) ||
+    Notification.permission !== "granted"
+  ){
+
+    return;
+
+  }
+
+  if(!ticketIdAtual){
+
+    return;
+
+  }
+
   try {
 
-    if(
-      "Notification" in window &&
-      Notification.permission === "granted"
-    ){
+    const registro =
+      await registroServiceWorkerPromise ||
+      await registrarServiceWorker();
 
-      new Notification(
-        "Solicitação concluída ✅",
-        {
-          body:
-            dados && dados.nomeLocal ?
-              "Local: " + dados.nomeLocal :
-              "Sua solicitação foi finalizada.",
+    if(!registro){
 
-          icon:
-            "logo.png"
-        }
-      );
+      return;
 
     }
+
+    let subscription =
+      await registro.pushManager.getSubscription();
+
+    if(!subscription){
+
+      subscription =
+        await registro.pushManager.subscribe({
+
+          userVisibleOnly:
+            true,
+
+          applicationServerKey:
+            urlBase64ToUint8Array(
+              VAPID_PUBLIC_KEY
+            )
+
+        });
+
+    }
+
+    await fetch(
+
+      API_URL +
+      "/push/subscribe",
+
+      {
+
+        method:
+          "POST",
+
+        headers: {
+
+          "Content-Type":
+            "application/json"
+
+        },
+
+        body:
+          JSON.stringify({
+
+            ticket_id:
+              ticketIdAtual,
+
+            subscription:
+              subscription.toJSON()
+
+          })
+
+      }
+
+    );
 
   }
   catch(error){
 
     console.error(
-      "Não foi possível exibir a notificação:",
+      "Não foi possível se inscrever para notificação push:",
       error
     );
 
   }
-
-
-  try {
-
-    if("vibrate" in navigator){
-
-      navigator.vibrate(
-        [200, 100, 200]
-      );
-
-    }
-
-  }
-  catch(error){
-
-    console.error(
-      "Não foi possível vibrar:",
-      error
-    );
-
-  }
-
-
-  tocarSom();
 
 }
 
@@ -935,6 +987,13 @@ function restaurarTelaSucesso(
 
 
   iniciarAtualizacaoStatus();
+
+
+  // Garante a inscrição push mesmo se a pessoa só concedeu a
+  // permissão depois de já ter uma solicitação em aberto.
+  inscreverPush(
+    ticketId
+  );
 
 }
 
@@ -1244,6 +1303,12 @@ async function consultarStatus(){
       // continuar mostrando "Solicitação concluída" até a
       // pessoa clicar em "Nova solicitação" (ou ler um novo
       // QR Code, o que leva à mesma tela com esse botão).
+      //
+      // O alerta em si (som/vibração/notificação local) não é
+      // mais necessário aqui: quem cuida disso agora é o push
+      // real, disparado pelo worker no momento da conclusão -
+      // funciona mesmo que esta função nunca chegue a rodar
+      // (ex: tela bloqueada).
 
       if(statusInterval){
 
@@ -1253,43 +1318,6 @@ async function consultarStatus(){
 
         statusInterval =
           null;
-
-      }
-
-
-      // Dispara o alerta (notificação/vibração/som) só na
-      // primeira vez que detectamos a conclusão. Marca no
-      // cache como "notificado" para não repetir o alerta
-      // caso a pessoa reabra a aba depois.
-
-      if(localEl.value){
-
-        const dadosSalvos =
-          lerSolicitacaoLocal(
-            localEl.value
-          );
-
-
-        if(
-          dadosSalvos &&
-          !dadosSalvos.notificado
-        ){
-
-          notificarConclusao(
-            dadosSalvos
-          );
-
-
-          dadosSalvos.notificado =
-            true;
-
-
-          salvarSolicitacaoLocal(
-            localEl.value,
-            dadosSalvos
-          );
-
-        }
 
       }
 
@@ -1567,6 +1595,15 @@ btn.addEventListener(
       if(ticketId){
 
         iniciarAtualizacaoStatus();
+
+
+        // Inscreve para notificação push real deste ticket -
+        // é isso que vai avisar a pessoa mesmo com a tela
+        // bloqueada quando o chamado for finalizado.
+
+        inscreverPush(
+          ticketId
+        );
 
       }
 
