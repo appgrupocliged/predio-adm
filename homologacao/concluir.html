@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0"
+>
+
+<title>Grupo CLIGED | Conclusão HML</title>
+
+<style>
+
+:root{
+  --bg:#101010;
+  --card:#1b1b1b;
+  --gold:#f1e7a8;
+  --gold2:#d9ca70;
+  --text:#f7f7f7;
+  --muted:#b8b8b8;
+  --line:#3b3b3b;
+}
+
+*{
+  box-sizing:border-box;
+}
+
+body{
+  margin:0;
+  background:var(--bg);
+  font-family:Arial,sans-serif;
+  color:var(--text);
+}
+
+.container{
+  max-width:500px;
+  min-height:100vh;
+  margin:auto;
+  padding:26px 18px 34px;
+}
+
+.logo-wrap{
+  text-align:center;
+  margin:5px 0 22px;
+}
+
+.logo{
+  width:150px;
+  max-width:60%;
+  height:auto;
+}
+
+.card{
+  background:var(--card);
+  border:1px solid #2c2c2c;
+  border-radius:20px;
+  padding:22px;
+  box-shadow:0 12px 35px #0008;
+}
+
+h1{
+  text-align:center;
+  color:var(--gold);
+  font-size:24px;
+  margin:0 0 8px;
+}
+
+.subtitle{
+  text-align:center;
+  color:var(--muted);
+  font-size:14px;
+  line-height:1.45;
+  margin-bottom:22px;
+}
+
+.info{
+  border:1px solid var(--line);
+  border-radius:11px;
+  padding:14px;
+  background:#151515;
+  margin-bottom:18px;
+  text-align:center;
+  color:var(--muted);
+  line-height:1.5;
+}
+
+.info strong{
+  color:var(--gold);
+}
+
+.info-loading{
+  color:var(--muted);
+}
+
+.info-success{
+  color:#fff;
+}
+
+.info-error{
+  color:#ff9a9a;
+}
+
+label{
+  display:block;
+  color:var(--gold);
+  font-weight:bold;
+  font-size:15px;
+  margin:18px 0 9px;
+}
+
+input{
+  width:100%;
+  padding:14px 12px;
+  border-radius:11px;
+  border:1px solid var(--line);
+  background:#111;
+  color:#fff;
+  font-size:15px;
+  outline:none;
+}
+
+input:focus{
+  border-color:var(--gold2);
+}
+
+button{
+  width:100%;
+  border:0;
+  border-radius:12px;
+  padding:15px;
+  margin-top:22px;
+  background:var(--gold);
+  color:#151515;
+  font-size:15px;
+  font-weight:800;
+  cursor:pointer;
+}
+
+button:disabled{
+  opacity:.45;
+  cursor:not-allowed;
+}
+
+.note{
+  text-align:center;
+  color:#888;
+  font-size:12px;
+  margin-top:13px;
+}
+
+.success{
+  display:none;
+  text-align:center;
+}
+
+.check{
+  font-size:58px;
+  color:var(--gold);
+}
+
+.success h2{
+  color:var(--gold);
+}
+
+.success p{
+  color:var(--muted);
+  line-height:1.6;
+}
+
+.error{
+  display:none;
+  text-align:center;
+  color:#ff8b8b;
+  line-height:1.5;
+}
+
+</style>
+
+</head>
+
+<body>
+<div role="status" style="background:#5c4721;color:#fff0c7;text-align:center;padding:10px;font:700 13px system-ui">🧪 HOMOLOGAÇÃO — SEM CONCLUSÃO DE CHAMADOS REAIS</div>
+
+<div class="container">
+
+  <div class="logo-wrap">
+
+    <img
+      class="logo"
+      src="https://appgrupocliged.github.io/predio-adm/logo.png"
+      alt="Grupo CLIGED"
+      width="150"
+      height="150"
+    >
+
+  </div>
+
+
+  <!-- =====================================================
+       CONCLUSÃO
+       ===================================================== -->
+
+  <div
+    class="card"
+    id="card"
+  >
+
+    <h1>
+      Concluir solicitação
+    </h1>
+
+    <div class="subtitle">
+      Confirme que a solicitação foi realizada.
+    </div>
+
+
+    <div
+      class="info info-loading"
+      id="info"
+    >
+      🔄 Carregando solicitação...
+    </div>
+
+
+    <label for="nome">
+      👤 Nome da colaboradora
+    </label>
+
+
+    <input
+      type="text"
+      id="nome"
+      placeholder="Digite seu nome"
+      autocomplete="name"
+    >
+
+
+    <button
+      id="concluir"
+      disabled
+    >
+      CONCLUIR SOLICITAÇÃO
+    </button>
+
+
+    <div class="note">
+      Ao confirmar, o atendimento será registrado no chamado.
+    </div>
+
+  </div>
+
+
+  <!-- =====================================================
+       SUCESSO
+       ===================================================== -->
+
+  <div
+    class="card success"
+    id="success"
+  >
+
+    <div class="check">
+      ✓
+    </div>
+
+    <h2>
+      Solicitação concluída!
+    </h2>
+
+    <p id="successMessage"></p>
+
+  </div>
+
+
+  <!-- =====================================================
+       ERRO
+       ===================================================== -->
+
+  <div
+    class="card error"
+    id="error"
+  >
+
+    <h2>
+      Não foi possível carregar
+    </h2>
+
+    <p id="errorMessage"></p>
+
+  </div>
+
+</div>
+
+
+<script>
+(() => {
+"use strict";
+const params=new URLSearchParams(location.search);
+const id=params.get("id")||"";
+const unidade=params.get("unidade")||"ADM-MCE";
+const local=params.get("local")||"";
+const itens=params.getAll("item").filter(x=>x.length<100).slice(0,10);
+const card=document.getElementById("card"),info=document.getElementById("info");
+const name=document.getElementById("nome"),btn=document.getElementById("concluir");
+const success=document.getElementById("success"),message=document.getElementById("successMessage");
+const error=document.getElementById("error"),errorMessage=document.getElementById("errorMessage");
+function fail(msg){card.style.display="none";error.style.display="block";errorMessage.textContent=msg}
+async function init(){
+ if(!id.startsWith("SIM-")||!/^[A-Z0-9-]{5,30}$/.test(id))return fail("Utilize apenas um link de simulação da homologação.");
+ try{
+  const r=await fetch("./validar",{method:"POST",headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({unit_code:unidade,local_code:local})});
+  const d=await r.json();
+  if(!r.ok||!d.sucesso)throw Error("Local não cadastrado.");
+  const p=d.local;
+  info.replaceChildren();
+  const title=document.createElement("strong");title.textContent="Solicitação simulada";info.appendChild(title);
+  info.append(document.createElement("br"),document.createTextNode("Unidade: "+p.unit_name));
+  info.append(document.createElement("br"),document.createTextNode("Local: "+p.local_code+" — "+p.local_name));
+  if(itens.length)info.append(document.createElement("br"),document.createTextNode("Itens: "+itens.join(", ")));
+  info.className="info";
+  const note=card.querySelector(".note");if(note)note.textContent="SIMULAÇÃO: nenhum chamado do TomTicket será concluído.";
+  btn.disabled=false;
+ }catch(e){fail("Não foi possível validar o local do teste: "+e.message)}
+}
+btn.addEventListener("click",()=>{
+ const nome=name.value.trim();
+ if(nome.length<2){alert("Informe o nome de quem realizou o atendimento.");return}
+ btn.disabled=true;card.style.display="none";success.style.display="block";
+ message.textContent="Atendimento simulado por "+nome+". Nenhum chamado real foi encerrado e nenhuma notificação foi enviada.";
+});
+init();
+})();
+</script>
+
+</body>
+
+</html>
