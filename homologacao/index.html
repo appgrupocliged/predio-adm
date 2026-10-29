@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0"
+>
+
+<title>Grupo CLIGED | Solicitação (HML)</title>
+
+<style>
+
+:root{
+  --bg:#101010;
+  --card:#1b1b1b;
+  --gold:#f1e7a8;
+  --gold2:#d9ca70;
+  --text:#f7f7f7;
+  --muted:#b8b8b8;
+  --line:#3b3b3b;
+}
+
+*{
+  box-sizing:border-box;
+}
+
+body{
+  margin:0;
+  background:var(--bg);
+  font-family:Arial,sans-serif;
+  color:var(--text);
+}
+
+.container{
+  max-width:500px;
+  min-height:100vh;
+  margin:auto;
+  padding:26px 18px 34px;
+}
+
+.logo-wrap{
+  text-align:center;
+  margin:5px 0 22px;
+}
+
+.logo{
+  width:190px;
+  max-width:72%;
+  height:auto;
+}
+
+.card{
+  background:var(--card);
+  border:1px solid #2c2c2c;
+  border-radius:20px;
+  padding:22px;
+  box-shadow:0 12px 35px #0008;
+}
+
+h1{
+  text-align:center;
+  color:var(--gold);
+  font-size:24px;
+  margin:0 0 8px;
+}
+
+.subtitle{
+  text-align:center;
+  color:var(--muted);
+  font-size:14px;
+  line-height:1.45;
+  margin-bottom:22px;
+}
+
+.title{
+  display:block;
+  color:var(--gold);
+  font-weight:bold;
+  font-size:15px;
+  margin:18px 0 9px;
+}
+
+select{
+  width:100%;
+  padding:14px 12px;
+  border-radius:11px;
+  border:1px solid var(--line);
+  background:#111;
+  color:#fff;
+  font-size:15px;
+}
+
+select:disabled{
+  opacity:1;
+  color:#fff;
+  background:#25231b;
+  border-color:var(--gold2);
+  cursor:not-allowed;
+}
+
+.local-code{
+  display:none;
+  text-align:center;
+  color:var(--gold);
+  font-size:13px;
+  margin-top:9px;
+}
+
+.options{
+  display:grid;
+  gap:9px;
+}
+
+.option{
+  display:flex;
+  align-items:center;
+  gap:11px;
+  border:1px solid var(--line);
+  border-radius:11px;
+  padding:13px;
+  background:#151515;
+  cursor:pointer;
+}
+
+.option.selected{
+  border-color:var(--gold2);
+  background:#25231b;
+}
+
+.option input{
+  width:19px;
+  height:19px;
+  accent-color:#d9ca70;
+}
+
+button{
+  width:100%;
+  border:0;
+  border-radius:12px;
+  padding:15px;
+  margin-top:22px;
+  background:var(--gold);
+  color:#151515;
+  font-size:15px;
+  font-weight:800;
+  cursor:pointer;
+}
+
+button:disabled{
+  opacity:.45;
+  cursor:not-allowed;
+}
+
+.note{
+  text-align:center;
+  color:#888;
+  font-size:12px;
+  margin-top:13px;
+}
+
+.success{
+  display:none;
+  text-align:center;
+}
+
+.check{
+  font-size:58px;
+  color:var(--gold);
+}
+
+.success h2{
+  color:var(--gold);
+}
+
+.success p{
+  color:var(--muted);
+  line-height:1.6;
+}
+
+.status-box{
+  margin-top:20px;
+  padding:16px;
+  border:1px solid var(--line);
+  border-radius:12px;
+  background:#151515;
+}
+
+.status-title{
+  color:var(--gold);
+  font-size:14px;
+  font-weight:bold;
+  margin-bottom:10px;
+}
+
+.status-value{
+  font-size:14px;
+  line-height:1.5;
+  color:#fff;
+  word-break:break-word;
+}
+
+.status-loading{
+  color:#b8b8b8;
+}
+
+.status-success{
+  color:#9be7a1;
+}
+
+.status-warning{
+  color:#f1d27a;
+}
+
+.status-error{
+  color:#ff9a9a;
+}
+
+.status-date{
+  margin-top:8px;
+  color:#888;
+  font-size:11px;
+}
+
+.reset{
+  background:transparent;
+  color:var(--gold);
+  border:1px solid #5a5332;
+}
+
+</style>
+
+</head>
+
+<body>
+<div role="status" style="background:#5c4721;color:#fff0c7;text-align:center;padding:10px;font:700 13px system-ui">🧪 HOMOLOGAÇÃO — NÃO GERA CHAMADOS REAIS</div>
+
+<div class="container">
+
+  <div class="logo-wrap">
+
+    <img
+      class="logo"
+      src="https://appgrupocliged.github.io/predio-adm/logo.png"
+      alt="Grupo CLIGED"
+      width="190"
+      height="190"
+      fetchpriority="high"
+    >
+
+  </div>
+
+
+  <div class="card" id="form">
+
+    <h1>
+      Avise nossa equipe
+    </h1>
+
+    <div class="subtitle">
+      Informe o que precisa de reposição ou limpeza.
+    </div>
+
+
+    <label class="title" for="unidade">🏥 Unidade</label>
+    <select id="unidade" disabled><option>Carregando unidades...</option></select>
+
+    <label class="title" for="local">
+      📍 Local
+    </label>
+
+
+    <select id="local">
+
+      <option value="">
+        Selecione o local...
+      </option>
+
+      <option value="B.01">
+        B.01 - DIRETORIA
+      </option>
+
+      <option value="B.02">
+        B.02 - CORREDOR AUTORIZAÇÃO
+      </option>
+
+      <option value="B.03">
+        B.03 - FINANCEIRO
+      </option>
+
+      <option value="B.04">
+        B.04 - RH
+      </option>
+
+      <option value="B.05">
+        B.05 - COMPRAS
+      </option>
+
+      <option value="B.06">
+        B.06 - ESTOQUE
+      </option>
+
+      <option value="B.07">
+        B.07 - ESTOQUE
+      </option>
+
+      <option value="B.08">
+        B.08 - CONTROLADORIA
+      </option>
+
+      <option value="B.09">
+        B.09 - COWORKING
+      </option>
+
+      <option value="B.10">
+        B.10 - CORREDOR REUNIÃO
+      </option>
+
+      <option value="B.11">
+        B.11 - D.P
+      </option>
+
+      <option value="B.12">
+        B.12 - CORREDOR CALL CENTER
+      </option>
+
+      <option value="B.13">
+        B.13 - COMFORT ADM
+      </option>
+
+      <option value="B.14">
+        B.14 - T.I
+      </option>
+
+      <option value="B.15">
+        B.15 - CTA ADM
+      </option>
+
+      <option value="B.16">
+        B.16 - MARKETING / INFRAESTRUTURA
+      </option>
+
+      <option value="B.17">
+        B.17 - FATURAMENTO
+      </option>
+
+      <option value="B.18">
+        B.18 - AUDITORIA
+      </option>
+
+      <option value="B.19">
+        B.19 - QUALIDADE
+      </option>
+
+    </select>
+
+
+    <div
+      class="local-code"
+      id="localCode"
+    ></div>
+
+
+    <label class="title">
+      🛠️ O que precisa de atenção?
+    </label>
+
+
+    <div class="options">
+
+      <label class="option">
+
+        <input
+          type="checkbox"
+          value="Papel higiênico"
+        >
+
+        <span>🧻</span>
+
+        <span>
+          Papel higiênico
+        </span>
+
+      </label>
+
+
+      <label class="option">
+
+        <input
+          type="checkbox"
+          value="Papel toalha"
+        >
+
+        <span>🧻</span>
+
+        <span>
+          Papel toalha
+        </span>
+
+      </label>
+
+
+      <label class="option">
+
+        <input
+          type="checkbox"
+          value="Sabonete líquido"
+        >
+
+        <span>🧴</span>
+
+        <span>
+          Sabonete líquido
+        </span>
+
+      </label>
+
+
+      <label class="option">
+
+        <input
+          type="checkbox"
+          value="Troca/retirada de lixo"
+        >
+
+        <span>🗑️</span>
+
+        <span>
+          Troca/retirada de lixo
+        </span>
+
+      </label>
+
+
+      <label class="option">
+
+        <input
+          type="checkbox"
+          value="limpeza"
+        >
+
+        <span>🧹</span>
+
+        <span>
+          Solicitar limpeza
+        </span>
+
+      </label>
+
+    </div>
+
+
+    <button
+      id="send"
+      disabled
+    >
+      ENVIAR SOLICITAÇÃO
+    </button>
+
+
+    <div class="note">
+      Ambiente de testes: nenhuma solicitação será registrada no TomTicket.
+    </div>
+
+  </div>
+
+
+  <div
+    class="card success"
+    id="success"
+  >
+
+    <div class="check">
+      ✓
+    </div>
+
+    <h2>
+      Solicitação enviada!
+    </h2>
+
+    <p id="summary"></p>
+
+
+    <div class="status-box">
+
+      <div class="status-title">
+        STATUS DA SOLICITAÇÃO
+      </div>
+
+      <div
+        class="status-value status-loading"
+        id="statusValue"
+      >
+        🔄 Consultando status...
+      </div>
+
+      <div
+        class="status-date"
+        id="statusDate"
+      ></div>
+
+    </div>
+
+
+    <button
+      class="reset"
+      type="button"
+      id="newRequest"
+    >
+      FAZER NOVA SOLICITAÇÃO
+    </button>
+
+  </div>
+
+</div>
+
+
+<script>
+(() => {
+"use strict";
+// Esta versão reutiliza o HTML/CSS original, mas NÃO utiliza APIs de produção.
+const form=document.getElementById("form"),success=document.getElementById("success");
+const unit=document.getElementById("unidade"),local=document.getElementById("local");
+const localCode=document.getElementById("localCode");
+const button=document.getElementById("send"),newRequest=document.getElementById("newRequest");
+const summary=document.getElementById("summary"),status=document.getElementById("statusValue");
+const date=document.getElementById("statusDate");
+const boxes=[...document.querySelectorAll('.options input[type="checkbox"]')];
+const params=new URLSearchParams(location.search);
+const qr=params.has("local"),requestedUnit=params.get("unidade")||params.get("unit_code")||(qr?"ADM-MCE":"CLI-MCE");
+const requestedLocal=(params.get("local")||"").trim().toUpperCase();
+let catalogo=[],lock=false;
+const add=(select,value,label)=>{const o=document.createElement("option");o.value=value;o.textContent=label;select.appendChild(o)};
+function update(){
+ const u=catalogo.find(x=>x.codigo===unit.value);
+ const place=u?.locais.find(x=>x.codigo===local.value);
+ localCode.textContent=place?(u.nome+" · "+place.codigo+" — "+place.nome):"";
+ button.disabled=!place||!boxes.some(b=>b.checked);
+}
+function reloadLocals(){
+ local.replaceChildren();
+ const u=catalogo.find(x=>x.codigo===unit.value);
+ if(!u){local.disabled=true;update();return}
+ for(const p of u.locais)add(local,p.codigo,p.codigo+" — "+p.nome);
+ if(lock)local.value=requestedLocal;
+ local.disabled=lock;
+ update();
+}
+unit.addEventListener("change",reloadLocals);
+local.addEventListener("change",update);
+for(const b of boxes)b.addEventListener("change",update);
+async function start(){
+ try{
+  const r=await fetch("./catalogo",{cache:"no-store"});if(!r.ok)throw Error("Catálogo indisponível.");
+  const obj=await r.json();catalogo=obj.unidades;
+  unit.replaceChildren();
+  for(const x of catalogo)add(unit,x.codigo,x.nome+" ("+x.codigo+")");
+  unit.value=requestedUnit;
+  if(!catalogo.some(x=>x.codigo===requestedUnit))throw Error("Unidade não cadastrada.");
+  lock=qr;
+  if(qr){
+    const res=await fetch("./validar",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({unit_code:requestedUnit,local_code:requestedLocal})});
+    const data=await res.json();
+    if(!res.ok||!data.sucesso)throw Error("QR Code não corresponde a um local cadastrado.");
+    unit.disabled=true;
+  }else{unit.disabled=false}
+  reloadLocals();
+ }catch(e){
+  unit.replaceChildren();local.replaceChildren();button.disabled=true;
+  localCode.textContent=e.message;
+ }
+}
+button.addEventListener("click",async()=>{
+ button.disabled=true;
+ try{
+  const items=boxes.filter(x=>x.checked).map(x=>x.value);
+  if(!items.length)throw Error("Selecione o que precisa de atenção.");
+  const response=await fetch("./validar",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({unit_code:unit.value,local_code:local.value})});
+  const data=await response.json();
+  if(!response.ok||!data.sucesso)throw Error("Local inválido.");
+  const place=data.local;
+  const demoId="SIM-"+crypto.randomUUID().slice(0,8).toUpperCase();
+  const link=new URL("./atendimento",location.href);
+  link.searchParams.set("id",demoId);
+  link.searchParams.set("unidade",place.unit_code);
+  link.searchParams.set("local",place.local_code);
+  for(const item of items)link.searchParams.append("item",item);
+  const heading=success.querySelector("h2");if(heading)heading.textContent="Solicitação simulada!";
+  summary.replaceChildren();
+  summary.append(document.createTextNode("Local: "+place.unit_name+" · "+place.local_code+" — "+place.local_name));
+  summary.append(document.createElement("br"),document.createTextNode("Itens: "+items.join(", ")));
+  const wrap=document.createElement("div");wrap.style.marginTop="18px";
+  const a=document.createElement("a");a.href=link.toString();a.textContent="ABRIR TELA DA COLABORADORA (TESTE)";
+  a.style.color="#f1e7a8";a.style.fontWeight="800";
+  wrap.appendChild(a);summary.appendChild(wrap);
+  status.textContent="🧪 SIMULAÇÃO — nenhum chamado foi criado";
+  status.className="status-value";
+  date.textContent="Validação realizada nesta tela de homologação.";
+  form.style.display="none";success.style.display="block";
+  success.scrollIntoView({behavior:"smooth",block:"start"});
+ }catch(e){alert("Erro na simulação: "+e.message)}
+ finally{update()}
+});
+newRequest.addEventListener("click",()=>{
+ form.style.display="block";success.style.display="none";
+ boxes.forEach(x=>x.checked=false);update();form.scrollIntoView({behavior:"smooth",block:"start"});
+});
+start();
+})();
+</script>
+
+</body>
+
+</html>
